@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+   <PackageReference Include="dapper" Version="2.0.123" />
+    <PackageReference Include="fluentnhibernate" Version="3.1.0" />
+  </ItemGroup>
+ <ItemGroup>
+    <ProjectReference Include="..\SistemaFinanceiros.Dominio\SistemaFinanceiro.Dominio.csproj" />
+  </ItemGroup>
+
+ 
+</Project>
