@@ -38,15 +38,13 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         }
         public DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest)
         {
-            var despesa = mapper.Map<Despesa>(despesaEditarRequest);
-           despesa = despesasServico.Editar(id, despesaEditarRequest.Nome, despesaEditarRequest.Valor, despesaEditarRequest.Mes, 
-           despesaEditarRequest.Ano, despesaEditarRequest.TipoDespesa, despesaEditarRequest.DataCadastro,
-           despesaEditarRequest.DataAlteracao, despesaEditarRequest.DataVencimento, despesaEditarRequest.Pago,
-           despesaEditarRequest.DespesaAtrasada, despesaEditarRequest.idCategoria);
             var transacao = session.BeginTransaction();
             try
             {
-                despesa = despesasRepositorio.Editar(despesa);
+                var despesa = despesasServico.Editar(id, despesaEditarRequest.Nome, despesaEditarRequest.Valor, despesaEditarRequest.Mes, 
+           despesaEditarRequest.Ano, despesaEditarRequest.TipoDespesa, despesaEditarRequest.DataCadastro,
+           despesaEditarRequest.DataAlteracao, despesaEditarRequest.DataVencimento, despesaEditarRequest.Pago,
+           despesaEditarRequest.DespesaAtrasada, despesaEditarRequest.idCategoria);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<DespesaResponse>(despesa);;
@@ -86,7 +84,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
              var transacao = session.BeginTransaction();
             try
             {
-                despesa = despesasRepositorio.Inserir(despesa);
+                despesa = despesasServico.Inserir(despesa);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<DespesaResponse>(despesa);

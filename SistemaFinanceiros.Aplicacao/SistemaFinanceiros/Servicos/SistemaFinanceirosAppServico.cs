@@ -26,16 +26,15 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
         }
         public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest)
         {
-            var sistemaFinanceiro = mapper.Map<SistemaFinanceiro>(sistemaFinanceiroEditarRequest);
-            sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, sistemaFinanceiroEditarRequest.Nome,
+           
+             var transacao = session.BeginTransaction();
+            try
+            {
+                var sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, sistemaFinanceiroEditarRequest.Nome,
             sistemaFinanceiroEditarRequest.Mes, sistemaFinanceiroEditarRequest.Ano, sistemaFinanceiroEditarRequest.DiaFechamento,
             sistemaFinanceiroEditarRequest.GerarCopiaDespesa, sistemaFinanceiroEditarRequest.MesCopia, 
             sistemaFinanceiroEditarRequest.AnoCopia
             );
-             var transacao = session.BeginTransaction();
-            try
-            {
-                sistemaFinanceiro = sistemaFinanceirosRepositorio.Editar(sistemaFinanceiro);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);;
@@ -75,7 +74,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
              var transacao = session.BeginTransaction();
             try
             {
-                sistemaFinanceiro = sistemaFinanceirosRepositorio.Inserir(sistemaFinanceiro);
+                sistemaFinanceiro = sistemaFinanceirosServico.Inserir(sistemaFinanceiro);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);

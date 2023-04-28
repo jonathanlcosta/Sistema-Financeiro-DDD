@@ -33,12 +33,10 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
         }
         public CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest)
         {
-           var categoria = mapper.Map<Categoria>(categoriaEditarRequest);
-           categoria = categoriasServico.Editar(id, categoriaEditarRequest.Nome, categoriaEditarRequest.idSistemaFinanceiro);
             var transacao = session.BeginTransaction();
             try
             {
-                categoria = categoriasRepositorio.Editar(categoria);
+                var categoria = categoriasServico.Editar(id, categoriaEditarRequest.Nome, categoriaEditarRequest.idSistemaFinanceiro);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);;
@@ -75,7 +73,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
              var transacao = session.BeginTransaction();
             try
             {
-                categoria = categoriasRepositorio.Inserir(categoria);
+                categoria = categoriasServico.Inserir(categoria);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);

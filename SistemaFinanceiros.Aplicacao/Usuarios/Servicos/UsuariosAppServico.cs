@@ -34,13 +34,11 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
         }
         public UsuarioResponse Editar(int id, UsuarioEditarRequest usuarioEditarRequest)
         {
-           var usuario = mapper.Map<Usuario>(usuarioEditarRequest);
-           usuario = usuariosServico.Editar(id, usuarioEditarRequest.CPF, usuarioEditarRequest.Nome, usuarioEditarRequest.Email, 
-           usuarioEditarRequest.Administrador, usuarioEditarRequest.SistemaAtual, usuarioEditarRequest.idSistemaFinanceiro);
            var transacao = session.BeginTransaction();
             try
             {
-                usuario = usuariosRepositorio.Editar(usuario);
+                var usuario = usuariosServico.Editar(id, usuarioEditarRequest.CPF, usuarioEditarRequest.Nome, usuarioEditarRequest.Email, 
+           usuarioEditarRequest.Administrador, usuarioEditarRequest.SistemaAtual, usuarioEditarRequest.idSistemaFinanceiro);
                 if(transacao.IsActive)
                     transacao.Commit();
                 return mapper.Map<UsuarioResponse>(usuario);;
