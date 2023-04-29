@@ -20,7 +20,7 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         }
 
 
-        [HttpGet("{emailUsuarioUm}")]
+        [HttpGet("despesas/despesasUsuario")]
         public ActionResult<IList<DespesaResponse>> ListarDespesasUsuario(string emailUsuario)
         {
             var response = despesasAppServico.ListarDespesasUsuario(emailUsuario);
@@ -28,7 +28,7 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             
         }
 
-        [HttpGet("{emailUsuario}")]
+       [HttpGet("despesas/usuario-nao-pagas-anterior")]
         public ActionResult<IList<DespesaResponse>> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario)
         {
             var response = despesasAppServico.ListarDespesasUsuarioNaoPagasMesesAnterior(emailUsuario);

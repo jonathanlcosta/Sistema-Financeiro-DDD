@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Transform;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
@@ -25,16 +19,18 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         private readonly IDespesasRepositorio despesasRepositorio;
         private readonly IDespesasServico despesasServico;
         private readonly ICategoriasServico categoriasServico;
+        private readonly IDespesasConsultasRepositorio despesasConsultasRepositorio;
         private readonly IMapper mapper;
         private readonly ISession session;
         public DespesasAppServico(IDespesasRepositorio despesasRepositorio, IDespesasServico despesasServico, ICategoriasServico categoriasServico,
-        IMapper mapper, ISession session)
+        IMapper mapper, ISession session, IDespesasConsultasRepositorio despesasConsultasRepositorio)
         {
             this.categoriasServico = categoriasServico;
             this.despesasServico = despesasServico;
             this.despesasRepositorio = despesasRepositorio;
             this.mapper = mapper;
             this.session = session;
+            this.despesasConsultasRepositorio = despesasConsultasRepositorio;
         }
         public DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest)
         {
@@ -80,7 +76,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
              var despesa = despesasServico.Instanciar(despesaInserirRequest.Nome, despesaInserirRequest.Valor, despesaInserirRequest.Mes, 
            despesaInserirRequest.Ano, despesaInserirRequest.TipoDespesa, despesaInserirRequest.DataCadastro,
            despesaInserirRequest.DataAlteracao, despesaInserirRequest.DataVencimento, despesaInserirRequest.Pago,
-           despesaInserirRequest.DespesaAtrasada, despesaInserirRequest.idCategoria);
+           despesaInserirRequest.DespesaAtrasada, despesaInserirRequest.idCategoria, despesaInserirRequest.IdUsuario);
              var transacao = session.BeginTransaction();
             try
             {
@@ -104,19 +100,19 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
-            IList<Despesa> despesa = despesasRepositorio.Query().Join(session.Query<Categoria>(), // Segunda sequência a ser unida
-                  d => d.Id,        // Chave da primeira sequência
-                  c => c.Id,        // Chave da segunda sequência
-                  (d, c) => new { Despesa = d, Categoria = c }) // Objeto resultante
-            .Join(session.Query<SistemaFinanceiro>(), // Terceira sequência a ser unida
-                  dc => dc.Categoria.Id, // Chave da primeira sequência
-                  s => s.Id, // Chave da terceira sequência
-                  (dc, s) => new { DespesaCategoria = dc, SistemaFinanceiro = s }) // Objeto resultante
-            .Join(session.Query<Usuario>(), // Quarta sequência a ser unida
-                  dcs => dcs.DespesaCategoria.Despesa.Id, // Chave da primeira sequência
-                  u => u.Id, // Chave da quarta sequência
-                  (dcs, u) => new { DespesaCategoriaSistemaFinanceiro = dcs, UsuarioSistemaFinanceiro = u }) // Objeto resultante
-            .Where(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Categoria.SistemaFinanceiro.Usuario.Email == emailUsuario && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Mes == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Mes && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Ano == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Ano)
+            IList<Despesa> despesa = despesasRepositorio.Query().Join(session.Query<Categoria>(), 
+                  d => d.Id,      
+                  c => c.Id,     
+                  (d, c) => new { Despesa = d, Categoria = c }) 
+            .Join(session.Query<SistemaFinanceiro>(), 
+                  dc => dc.Categoria.Id, 
+                  s => s.Id,
+                  (dc, s) => new { DespesaCategoria = dc, SistemaFinanceiro = s }) 
+            .Join(session.Query<Usuario>(), 
+                  dcs => dcs.DespesaCategoria.Despesa.Id, 
+                  u => u.Id, 
+                  (dcs, u) => new { DespesaCategoriaSistemaFinanceiro = dcs, UsuarioSistemaFinanceiro = u }) 
+            .Where(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Usuario.Email == emailUsuario && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Mes == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Mes && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Ano == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Ano)
             .Select(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa)
             .ToList();
 
@@ -124,22 +120,11 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             return response;
         }
 
-        public IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario)
+        public PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario)
         {
-    //         var criteria = session.CreateCriteria<Despesa>()
-    //         .CreateAlias("CATEGORIAS", "c")
-    //         .CreateAlias("c.SISTEMAFINANCEIROS", "s")
-    //         .CreateAlias("s.USUARIOS", "us")
-    //         .Add(Restrictions.Eq("us.email", emailUsuario))
-    //         .Add(Restrictions.Lt("Mes", DateTime.Now.Month))
-    //         .Add(Restrictions.Not(Restrictions.Eq("Pago", true)))
-    //         .SetResultTransformer(Transformers.DistinctRootEntity);
-    //    var despesa = criteria.List<Despesa>();
-    //     var response = mapper.Map<IList<DespesaResponse>>(despesa);
-    //         return response;
 
-    IList<Despesa> despesas = despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(emailUsuario);
-    var response = mapper.Map<IList<DespesaResponse>>(despesas);
+        var despesas = despesasConsultasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(1, 100, emailUsuario);
+        var response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
          return response;
 
         }

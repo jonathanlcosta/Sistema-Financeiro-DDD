@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
+using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 
 namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 {
@@ -14,6 +15,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
         public virtual decimal Valor { get; protected set; }
         public virtual int Mes { get; protected set; }
         public virtual int Ano { get; protected set; }
+        public virtual Usuario Usuario { get; protected set; }
         public virtual EnumTipoDespesa TipoDespesa { get; protected set; }
         public virtual DateTime DataCadastro { get; protected set; }
         public virtual DateTime DataAlteracao { get; protected set; }
@@ -25,7 +27,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
         public Despesa(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro,
         DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada,
-        Categoria categoria)
+        Categoria categoria, Usuario usuario)
         {
             SetNome(nome);
             SetValor(valor);
@@ -38,6 +40,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
             SetPago(pago);
             SetDespesaAtrasada(despesaAtrasada);
             SetCategoria(categoria);
+            SetUsuario(usuario);
         }
 
         protected Despesa(){}
@@ -49,6 +52,11 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
             if (nome.Length > 100)
                 throw new ArgumentOutOfRangeException("O nome nao pode ter mais que 100 caracteres");
             Nome = nome;
+        }
+
+        public virtual void SetUsuario(Usuario usuario)
+        {
+            Usuario = usuario;
         }
 
         public virtual void SetValor(decimal valor)

@@ -27,6 +27,8 @@ namespace SistemaFinanceiros.Infra.Despesas.Mapeamentos
             Map(x=>x.Valor).Column("valor");
             Map(x=>x.TipoDespesa).CustomType<EnumTipoDespesa>().Column("tipoDespesa");
             References(x=>x.Categoria).Column("idCategoria");
+            References(x=>x.Usuario).Column("idUsuario");
+            
         }
     }
 }

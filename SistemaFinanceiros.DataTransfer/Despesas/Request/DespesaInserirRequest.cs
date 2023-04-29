@@ -20,5 +20,6 @@ namespace SistemaFinanceiros.DataTransfer.Despesas.Request
         public bool Pago { get; set; }
         public bool DespesaAtrasada { get; set; }
         public int idCategoria { get; set; }
+         public int IdUsuario { get; set; }
     }
 }

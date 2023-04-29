@@ -13,7 +13,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces
         Despesa Inserir(Despesa despesa);
         Despesa Instanciar(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro,
         DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada,
-        int idCategoria);
+        int idCategoria, int IdUsuario);
         Despesa Editar(int id, string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro,
         DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada,
         int idCategoria);

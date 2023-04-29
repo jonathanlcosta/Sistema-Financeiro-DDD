@@ -7,6 +7,7 @@ using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
+using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 
 namespace SistemaFinanceiros.Dominio.Despesas.Servicos
 {
@@ -14,10 +15,14 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
     {
         private readonly IDespesasRepositorio despesasRepositorio;
         private readonly ICategoriasServico categoriasServico;
-        public DespesasServico(IDespesasRepositorio despesasRepositorio,ICategoriasServico categoriasServico )
+        private readonly IUsuariosServico usuariosServico;
+        public DespesasServico(IDespesasRepositorio despesasRepositorio,ICategoriasServico categoriasServico,
+        IUsuariosServico usuariosServico )
         {
             this.despesasRepositorio = despesasRepositorio;
             this.categoriasServico = categoriasServico;
+            this.usuariosServico = usuariosServico;
+
         }
 
         public Despesa Editar(int id, string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria)
@@ -46,9 +51,10 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
             return response;
         }
 
-        public Despesa Instanciar(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria)
+        public Despesa Instanciar(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria, int IdUsuario)
         {   var categoria = categoriasServico.Validar(idCategoria);
-            var despesa = new Despesa(nome, valor, mes, ano, tipoDespesa, dataCadastro, dataAlteracao, dataVencimento, pago, despesaAtrasada, categoria);
+            var usuario = usuariosServico.Validar(IdUsuario);
+            var despesa = new Despesa(nome, valor, mes, ano, tipoDespesa, dataCadastro, dataAlteracao, dataVencimento, pago, despesaAtrasada, categoria, usuario);
             return despesa;
         }
 

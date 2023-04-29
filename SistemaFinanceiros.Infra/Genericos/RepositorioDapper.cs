@@ -30,13 +30,13 @@ namespace SistemaFinanceiros.Infra.Genericos
 
         }
 
-        public string GerarQueryPaginacao(string query, int pg, int qt)
-        {
-            var offset = (pg - 1) * qt;
-            if (pg == 1)
-            return string.Format(@"{0} FETCH FIRST {1} ROWS ONLY", query, qt);
-            else 
-            return string.Format(@"{0} OFFSET {1} ROWS FETCH NEXT {2} ROWS ONLY", query, offset, qt);
-        }
+       public string GerarQueryPaginacao(string query, int pg, int qt)
+{
+    var offset = (pg - 1) * qt;
+    if (pg == 1)
+        return string.Format(@"{0} LIMIT {1}", query, qt);
+    else
+        return string.Format(@"{0} LIMIT {1}, {2}", query, offset, qt);
+}
     }
 }

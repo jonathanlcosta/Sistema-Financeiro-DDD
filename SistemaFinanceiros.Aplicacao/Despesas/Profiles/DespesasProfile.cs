@@ -13,8 +13,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Profiles
     {
         public DespesasProfile()
         {
-        CreateMap<Despesa, DespesaResponse>()
-        .ForMember(x => x.idCategoria, m => m.MapFrom(y => y.Categoria!.Id));
+        CreateMap<Despesa, DespesaResponse>();
         CreateMap<Despesa, DespesaListarRequest>();
         CreateMap<DespesaInserirRequest, Despesa>();
         CreateMap<DespesaEditarRequest, Despesa>(); 

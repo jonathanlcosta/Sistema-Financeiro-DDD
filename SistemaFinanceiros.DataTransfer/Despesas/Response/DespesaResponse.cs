@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.DataTransfer.Categorias.Response;
+using SistemaFinanceiros.DataTransfer.Usuarios.Response;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
 
 namespace SistemaFinanceiros.DataTransfer.Despesas.Response
@@ -20,6 +22,7 @@ namespace SistemaFinanceiros.DataTransfer.Despesas.Response
         public DateTime DataVencimento { get; set; }
         public bool Pago { get; set; }
         public bool DespesaAtrasada { get; set; }
-        public int idCategoria { get; set; }
+        public CategoriaResponse Categoria { get; set; }
+        public UsuarioResponse Usuario { get; set; }
     }
 }
