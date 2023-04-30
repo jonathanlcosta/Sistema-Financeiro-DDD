@@ -8,8 +8,6 @@ using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
-using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
-using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.util;
 
 namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
