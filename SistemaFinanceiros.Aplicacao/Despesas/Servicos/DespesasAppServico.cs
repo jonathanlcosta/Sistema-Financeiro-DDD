@@ -97,6 +97,17 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             }
         }
 
+        public PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, string email )
+        {
+            if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
+            IQueryable<Despesa> query = despesasRepositorio.Query();
+            query = query.Where(d => d.Usuario.Email == email);
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, pagina, quantidade);
+            PaginacaoConsulta<DespesaResponse> response;
+            response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
+            return response;
+        }
+
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
 

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
+using SistemaFinanceiros.Dominio.util;
 
 namespace SistemaFinanceiros.API.Controllers.Despesas
 {
@@ -59,6 +60,12 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         {
             var retorno = despesasAppServico.Inserir(request);
             return Ok(retorno);
+        }
+
+        [HttpGet]
+        public ActionResult<PaginacaoConsulta<DespesaResponse>> Listar(int pagina, int quantidade, string email)
+        {    var response = despesasAppServico.Listar(pagina, quantidade, email);
+            return Ok(response);
         }
     }
 }
