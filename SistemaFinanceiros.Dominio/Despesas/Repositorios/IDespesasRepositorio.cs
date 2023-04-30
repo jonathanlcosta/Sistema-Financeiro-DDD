@@ -9,6 +9,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios
 {
     public interface IDespesasRepositorio : IGenericoRepositorio<Despesa>
     {
-        
+        IList<Despesa> ListarDespesasUsuarioNaoPagasMesesAnterior(string email);
+        IList<Despesa> ListarDespesasUsuario(string email);
     }
 }

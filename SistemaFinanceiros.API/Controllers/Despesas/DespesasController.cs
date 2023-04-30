@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
@@ -19,7 +15,6 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             this.despesasAppServico = despesasAppServico;
         }
 
-
         [HttpGet("despesas/despesasUsuario")]
         public ActionResult<IList<DespesaResponse>> ListarDespesasUsuario(string emailUsuario)
         {
@@ -35,6 +30,13 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             return Ok(response);      
         }
 
+        [HttpGet("despesas/usuario-nao-pagas-atras")]
+        public ActionResult<IList<DespesaResponse>> ListarDespesasUsuarioNaoPagasMesesAtras(string emailUsuario)
+        {
+            var response = despesasAppServico.ListarDespesasUsuarioNaoPagasMesesAtras(emailUsuario);
+            return Ok(response);      
+        }
+
         [HttpGet("{id}")]
         public ActionResult<DespesaResponse> Recuperar(int id)
         {
@@ -46,13 +48,17 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             return Ok(response);
         }
 
+        [HttpGet("CarregaGraficos")]
+        public object CarregaGraficos(string emailUsuario)
+        {
+            return  despesasAppServico.CarregaGraficos(emailUsuario);
+        }
+
         [HttpPost]
         public ActionResult<DespesaResponse> Inserir([FromBody] DespesaInserirRequest request)
         {
             var retorno = despesasAppServico.Inserir(request);
             return Ok(retorno);
         }
-
-
     }
 }

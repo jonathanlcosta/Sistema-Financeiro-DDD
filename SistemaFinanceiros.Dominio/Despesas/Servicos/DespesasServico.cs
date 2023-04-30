@@ -25,6 +25,33 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
 
         }
 
+        public object CarregaGraficos(string email)
+        {
+            var despesasUsuario =  despesasRepositorio.ListarDespesasUsuario(email);
+            var despesasAnterior =  despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(email);
+
+            var despesas_naoPagasMesesAnteriores = despesasAnterior.Any() ?
+                despesasAnterior.ToList().Sum(x => x.Valor) : 0;
+
+            var despesas_pagas = despesasUsuario.Where(d => d.Pago && d.TipoDespesa == EnumTipoDespesa.Contas)
+                .Sum(x => x.Valor);
+
+            var despesas_pendentes = despesasUsuario.Where(d => !d.Pago && d.TipoDespesa == EnumTipoDespesa.Contas)
+                .Sum(x => x.Valor);
+
+            var investimentos = despesasUsuario.Where(d => d.TipoDespesa == EnumTipoDespesa.Investimento)
+                .Sum(x => x.Valor);
+
+            return new
+            {
+                sucesso = "OK",
+                despesas_pagas = despesas_pagas,
+                despesas_pendentes = despesas_pendentes,
+                despesas_naoPagasMesesAnteriores = despesas_naoPagasMesesAnteriores,
+                investimentos = investimentos
+            };
+        }
+
         public Despesa Editar(int id, string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria)
         {
             var categoria = categoriasServico.Validar(idCategoria);

@@ -32,6 +32,12 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             this.session = session;
             this.despesasConsultasRepositorio = despesasConsultasRepositorio;
         }
+
+        public object CarregaGraficos(string email)
+        {
+            return despesasServico.CarregaGraficos(email);
+        }
+
         public DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest)
         {
             var transacao = session.BeginTransaction();
@@ -100,23 +106,25 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
-            IList<Despesa> despesa = despesasRepositorio.Query().Join(session.Query<Categoria>(), 
-                  d => d.Id,      
-                  c => c.Id,     
-                  (d, c) => new { Despesa = d, Categoria = c }) 
-            .Join(session.Query<SistemaFinanceiro>(), 
-                  dc => dc.Categoria.Id, 
-                  s => s.Id,
-                  (dc, s) => new { DespesaCategoria = dc, SistemaFinanceiro = s }) 
-            .Join(session.Query<Usuario>(), 
-                  dcs => dcs.DespesaCategoria.Despesa.Id, 
-                  u => u.Id, 
-                  (dcs, u) => new { DespesaCategoriaSistemaFinanceiro = dcs, UsuarioSistemaFinanceiro = u }) 
-            .Where(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Usuario.Email == emailUsuario && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Mes == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Mes && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Ano == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Ano)
-            .Select(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa)
-            .ToList();
+            // IList<Despesa> despesa = despesasRepositorio.Query().Join(session.Query<Categoria>(), 
+            //       d => d.Id,      
+            //       c => c.Id,     
+            //       (d, c) => new { Despesa = d, Categoria = c }) 
+            // .Join(session.Query<SistemaFinanceiro>(), 
+            //       dc => dc.Categoria.Id, 
+            //       s => s.Id,
+            //       (dc, s) => new { DespesaCategoria = dc, SistemaFinanceiro = s }) 
+            // .Join(session.Query<Usuario>(), 
+            //       dcs => dcs.DespesaCategoria.Despesa.Id, 
+            //       u => u.Id, 
+            //       (dcs, u) => new { DespesaCategoriaSistemaFinanceiro = dcs, UsuarioSistemaFinanceiro = u }) 
+            // .Where(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Usuario.Email == emailUsuario && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Mes == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Mes && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Ano == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Ano)
+            // .Select(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa)
+            // .ToList();
 
-            var response = mapper.Map<IList<DespesaResponse>>(despesa);
+            var despesas = despesasRepositorio.ListarDespesasUsuario(emailUsuario);
+
+            var response = mapper.Map<IList<DespesaResponse>>(despesas);
             return response;
         }
 
@@ -127,6 +135,13 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         var response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
          return response;
 
+        }
+
+        public IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email)
+        {
+            var despesas = despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(email);
+            var response = mapper.Map<IList<DespesaResponse>>(despesas);
+            return response;
         }
 
         public DespesaResponse Recuperar(int id)

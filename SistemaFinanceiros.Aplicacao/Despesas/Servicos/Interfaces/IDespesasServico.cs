@@ -17,7 +17,9 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         void Excluir(int id); 
         IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario);
         PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario);
+        object CarregaGraficos(string email);
 
+        IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
 
     }
 }
