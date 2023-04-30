@@ -99,31 +99,10 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             }
         }
 
-        public PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
-            // IList<Despesa> despesa = despesasRepositorio.Query().Join(session.Query<Categoria>(), 
-            //       d => d.Id,      
-            //       c => c.Id,     
-            //       (d, c) => new { Despesa = d, Categoria = c }) 
-            // .Join(session.Query<SistemaFinanceiro>(), 
-            //       dc => dc.Categoria.Id, 
-            //       s => s.Id,
-            //       (dc, s) => new { DespesaCategoria = dc, SistemaFinanceiro = s }) 
-            // .Join(session.Query<Usuario>(), 
-            //       dcs => dcs.DespesaCategoria.Despesa.Id, 
-            //       u => u.Id, 
-            //       (dcs, u) => new { DespesaCategoriaSistemaFinanceiro = dcs, UsuarioSistemaFinanceiro = u }) 
-            // .Where(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Usuario.Email == emailUsuario && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Mes == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Mes && s.DespesaCategoriaSistemaFinanceiro.SistemaFinanceiro.Ano == s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa.Ano)
-            // .Select(s => s.DespesaCategoriaSistemaFinanceiro.DespesaCategoria.Despesa)
-            // .ToList();
 
             var despesas = despesasRepositorio.ListarDespesasUsuario(emailUsuario);
-
             var response = mapper.Map<IList<DespesaResponse>>(despesas);
             return response;
         }

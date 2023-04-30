@@ -10,7 +10,6 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
 {
     public interface IDespesasAppServico
     {
-        PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest);
         DespesaResponse Recuperar(int id);
         DespesaResponse Inserir(DespesaInserirRequest despesaInserirRequest);
         DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest);
@@ -18,7 +17,6 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario);
         PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario);
         object CarregaGraficos(string email);
-
         IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
 
     }
