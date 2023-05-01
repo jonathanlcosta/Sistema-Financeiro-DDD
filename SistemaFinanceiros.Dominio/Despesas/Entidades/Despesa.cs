@@ -56,6 +56,8 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
         public virtual void SetUsuario(Usuario usuario)
         {
+            if(usuario is null)
+            throw new ArgumentException("O usuario é obrigatório");
             Usuario = usuario;
         }
 
