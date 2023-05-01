@@ -97,16 +97,37 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             }
         }
 
-        public PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, string email )
+        public PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest)
         {
             if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
             IQueryable<Despesa> query = despesasRepositorio.Query();
-            query = query.Where(d => d.Usuario.Email == email);
+            query = query.Where(d => d.Usuario.Email == despesaListarRequest.emailUsuario);
             PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, pagina, quantidade);
             PaginacaoConsulta<DespesaResponse> response;
             response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
             return response;
         }
+
+        public PaginacaoConsulta<DespesaResponse> ListarDespesas(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest)
+        {
+            if (pagina == null || pagina.Value <= 0) 
+                throw new Exception("Pagina não especificada");
+
+            if (quantidade <= 0)
+                throw new Exception("Quantidade inválida");
+
+            IQueryable<Despesa> query = despesasRepositorio.Query()
+                .Where(d => d.Usuario.Email == despesaListarRequest.emailUsuario && 
+                            !d.Pago &&
+                            d.DataVencimento.Year == DateTime.Now.Year &&
+                            d.DataVencimento.Month == DateTime.Now.AddMonths(-1).Month);
+
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, pagina, quantidade);
+            PaginacaoConsulta<DespesaResponse> response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
+
+            return response;
+        }
+
 
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
