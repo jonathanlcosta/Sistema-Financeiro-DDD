@@ -60,5 +60,57 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             categoriasAppServico.Excluir(id);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("pdf")]
+        public ActionResult ListarPdf()
+        {
+            Stream conteudo = categoriasAppServico.ListarPdf();
+
+            // Se retornou conte�do, ent�o retorna um FileStreamResult com o
+            // conte�do do PDF, sen�o retorna 404.
+            if (conteudo != null)
+                return new FileStreamResult(conteudo, "application/pdf");
+            else
+                return NotFound();
+        }
+
+        /// <summary>
+        /// Listar categorias em formato HTML
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("html")]
+        public ActionResult ListarHtml()
+        {
+            string conteudo = categoriasAppServico.ListarHtml();
+
+            if (conteudo != null)
+            {
+                return new ContentResult
+                {
+                    ContentType = "text/html",
+                    Content = conteudo
+                };
+            }
+            else
+                return NotFound();
+        }
+
+        [HttpPost]
+        [Route("excel")]
+        public ActionResult UploadExcel()
+        {
+            var arquivos = Request.Form?.Files;
+
+            if (arquivos != null && arquivos.Count > 0)
+            {
+                var file = arquivos[0].OpenReadStream();
+                categoriasAppServico.UploadExcel(file);
+                return Ok();
+            }
+            else
+                return NotFound();
+        }
     }
 }

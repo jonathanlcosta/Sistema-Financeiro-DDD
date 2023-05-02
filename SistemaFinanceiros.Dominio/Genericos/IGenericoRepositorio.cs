@@ -15,6 +15,7 @@ namespace SistemaFinanceiros.Dominio.Genericos
         T Editar(T entidade);
 
         void Excluir(T entidade);
+        void Inserir(IEnumerable<T> entidades);
 
         PaginacaoConsulta<T> Listar(IQueryable<T> query, int? pagina, int quantidade);
 

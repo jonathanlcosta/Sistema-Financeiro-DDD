@@ -32,6 +32,14 @@ namespace SistemaFinanceiros.Infra.Genericos
             return entidade;
         }
 
+        public void Inserir(IEnumerable<T> entidades)
+        {
+            foreach (T entidade in entidades)
+            {
+                session.Save(entidade);
+            }
+        }
+
         public PaginacaoConsulta<T> Listar(IQueryable<T> query, int? pagina, int quantidade)
         {
             int quantidadeRegistros = query.ToList().Count();

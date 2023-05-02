@@ -29,10 +29,11 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
             SetAnoCopia(anoCopia);
         }
 
-        protected SistemaFinanceiro()
+        public SistemaFinanceiro()
         {
             
         }
+
         public virtual void SetNome(string nome)
         {
             if (string.IsNullOrWhiteSpace(nome))
