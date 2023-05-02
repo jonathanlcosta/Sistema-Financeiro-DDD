@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using NHibernate;
+using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.Aplicacao.Usuarios.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Usuarios.Request;
 using SistemaFinanceiros.DataTransfer.Usuarios.Response;
@@ -20,51 +21,47 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
         private readonly ISistemaFinanceirosServico sistemaFinanceirosServico;
         private readonly IUsuariosServico usuariosServico;
         private readonly IUsuariosRepositorio usuariosRepositorio;
-        private readonly ISession session;
         private readonly IMapper mapper;
+        private readonly IUnitOfWork unitOfWork;
         
         public UsuariosAppServico(ISistemaFinanceirosServico sistemaFinanceirosServico, IUsuariosServico usuariosServico,
-        IUsuariosRepositorio usuariosRepositorio, ISession session,  IMapper mapper)
+        IUsuariosRepositorio usuariosRepositorio, IUnitOfWork unitOfWork,  IMapper mapper)
         {
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
             this.usuariosRepositorio = usuariosRepositorio;
             this.usuariosServico = usuariosServico;
             this.mapper = mapper;
-            this.session = session;
+           this.unitOfWork = unitOfWork;
         }
         public UsuarioResponse Editar(int id, UsuarioEditarRequest usuarioEditarRequest)
         {
-           var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var usuario = usuariosServico.Editar(id, usuarioEditarRequest.CPF, usuarioEditarRequest.Nome, usuarioEditarRequest.Email, 
            usuarioEditarRequest.Administrador, usuarioEditarRequest.SistemaAtual, usuarioEditarRequest.idSistemaFinanceiro);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<UsuarioResponse>(usuario);;
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }
 
         public void Excluir(int id)
         {
-            var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var usuario = usuariosServico.Validar(id);
                 usuariosRepositorio.Excluir(usuario);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }

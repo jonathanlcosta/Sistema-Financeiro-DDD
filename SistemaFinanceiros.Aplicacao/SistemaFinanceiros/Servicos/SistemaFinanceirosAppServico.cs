@@ -1,6 +1,7 @@
 using AutoMapper;
 using NHibernate;
 using SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos.Interfaces;
+using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Request;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Response;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
@@ -14,53 +15,49 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
     {
         private readonly ISistemaFinanceirosServico sistemaFinanceirosServico;
         private readonly IMapper mapper;
-        private readonly ISession session;
+        private readonly IUnitOfWork unitOfWork;
         private readonly ISistemaFinanceirosRepositorio sistemaFinanceirosRepositorio;
         public SistemaFinanceirosAppServico(ISistemaFinanceirosServico sistemaFinanceirosServico,IMapper mapper,
-        ISession session, ISistemaFinanceirosRepositorio sistemaFinanceirosRepositorio)
+        IUnitOfWork unitOfWork, ISistemaFinanceirosRepositorio sistemaFinanceirosRepositorio)
         {
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
             this.mapper = mapper;
-            this.session = session;
+            this.unitOfWork = unitOfWork;
             this.sistemaFinanceirosRepositorio = sistemaFinanceirosRepositorio;
         }
         public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest)
         {
            
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, sistemaFinanceiroEditarRequest.Nome,
             sistemaFinanceiroEditarRequest.Mes, sistemaFinanceiroEditarRequest.Ano, sistemaFinanceiroEditarRequest.DiaFechamento,
             sistemaFinanceiroEditarRequest.GerarCopiaDespesa, sistemaFinanceiroEditarRequest.MesCopia, 
             sistemaFinanceiroEditarRequest.AnoCopia
             );
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);;
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+               unitOfWork.Rollback();
                 throw;
             }
         }
 
         public void Excluir(int id)
         {
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
                 sistemaFinanceirosRepositorio.Excluir(sistemaFinanceiro);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+               unitOfWork.Rollback();
                 throw;
             }
         }
@@ -71,18 +68,16 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             sistemaFinanceiroInserirRequest.Mes, sistemaFinanceiroInserirRequest.Ano, sistemaFinanceiroInserirRequest.DiaFechamento,
             sistemaFinanceiroInserirRequest.GerarCopiaDespesa, sistemaFinanceiroInserirRequest.MesCopia,
             sistemaFinanceiroInserirRequest.AnoCopia);
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 sistemaFinanceiro = sistemaFinanceirosServico.Inserir(sistemaFinanceiro);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using NHibernate;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
+using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
@@ -19,15 +20,15 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         private readonly ICategoriasServico categoriasServico;
         private readonly IDespesasConsultasRepositorio despesasConsultasRepositorio;
         private readonly IMapper mapper;
-        private readonly ISession session;
+        private readonly IUnitOfWork unitOfWork;
         public DespesasAppServico(IDespesasRepositorio despesasRepositorio, IDespesasServico despesasServico, ICategoriasServico categoriasServico,
-        IMapper mapper, ISession session, IDespesasConsultasRepositorio despesasConsultasRepositorio)
+        IMapper mapper,  IUnitOfWork unitOfWork, IDespesasConsultasRepositorio despesasConsultasRepositorio)
         {
             this.categoriasServico = categoriasServico;
             this.despesasServico = despesasServico;
             this.despesasRepositorio = despesasRepositorio;
             this.mapper = mapper;
-            this.session = session;
+            this.unitOfWork = unitOfWork;
             this.despesasConsultasRepositorio = despesasConsultasRepositorio;
         }
 
@@ -38,39 +39,35 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest)
         {
-            var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var despesa = despesasServico.Editar(id, despesaEditarRequest.Nome, despesaEditarRequest.Valor, despesaEditarRequest.Mes, 
            despesaEditarRequest.Ano, despesaEditarRequest.TipoDespesa, despesaEditarRequest.DataCadastro,
            despesaEditarRequest.DataAlteracao, despesaEditarRequest.DataVencimento, despesaEditarRequest.Pago,
            despesaEditarRequest.DespesaAtrasada, despesaEditarRequest.idCategoria);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<DespesaResponse>(despesa);;
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }
 
         public void Excluir(int id)
         {
-            var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var despesa = despesasServico.Validar(id);
                 despesasRepositorio.Excluir(despesa);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }
@@ -81,18 +78,16 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
            despesaInserirRequest.Ano, despesaInserirRequest.TipoDespesa, despesaInserirRequest.DataCadastro,
            despesaInserirRequest.DataAlteracao, despesaInserirRequest.DataVencimento, despesaInserirRequest.Pago,
            despesaInserirRequest.DespesaAtrasada, despesaInserirRequest.idCategoria, despesaInserirRequest.IdUsuario);
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 despesa = despesasServico.Inserir(despesa);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<DespesaResponse>(despesa);
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+               unitOfWork.Rollback();
                 throw;
             }
         }

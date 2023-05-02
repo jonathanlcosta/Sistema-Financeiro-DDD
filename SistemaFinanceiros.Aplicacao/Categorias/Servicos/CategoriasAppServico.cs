@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using NHibernate;
 using SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces;
+using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
@@ -21,48 +22,44 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
         private readonly ICategoriasRepositorio categoriasRepositorio;
         private readonly ISistemaFinanceirosServico sistemaFinanceirosServico;
         private readonly IMapper mapper;
-        private readonly ISession session;
+        private readonly IUnitOfWork unitOfWork;
         public CategoriasAppServico(ICategoriasServico categoriasServico, ICategoriasRepositorio categoriasRepositorio,
-         ISistemaFinanceirosServico sistemaFinanceirosServico, IMapper mapper, ISession session)
+         ISistemaFinanceirosServico sistemaFinanceirosServico, IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.categoriasRepositorio = categoriasRepositorio;
             this.categoriasServico = categoriasServico;
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
-            this.session = session;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
         public CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest)
         {
-            var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var categoria = categoriasServico.Editar(id, categoriaEditarRequest.Nome, categoriaEditarRequest.idSistemaFinanceiro);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);;
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }
 
         public void Excluir(int id)
         {
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 var categoria = categoriasServico.Validar(id);
                 categoriasRepositorio.Excluir(categoria);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+               unitOfWork.Rollback();
                 throw;
             }
         }
@@ -70,18 +67,16 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
         public CategoriaResponse Inserir(CategoriaInserirRequest categoriaInserirRequest)
         {
             var categoria = categoriasServico.Instanciar(categoriaInserirRequest.Nome, categoriaInserirRequest.idSistemaFinanceiro);
-             var transacao = session.BeginTransaction();
             try
             {
+                unitOfWork.BeginTransaction();
                 categoria = categoriasServico.Inserir(categoria);
-                if(transacao.IsActive)
-                    transacao.Commit();
+                unitOfWork.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);
             }
             catch
             {
-                if(transacao.IsActive)
-                    transacao.Rollback();
+                unitOfWork.Rollback();
                 throw;
             }
         }
