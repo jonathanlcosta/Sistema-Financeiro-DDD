@@ -4,7 +4,6 @@ using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
-using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
@@ -113,7 +112,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
             IQueryable<Despesa> query = despesasRepositorio.Query()
                 .Where(d => d.Usuario.Email == despesaListarRequest.emailUsuario && 
-                            !d.Pago &&
+                            d.Pago == false &&
                             d.DataVencimento.Year == DateTime.Now.Year &&
                             d.DataVencimento.Month == DateTime.Now.AddMonths(-1).Month);
 
