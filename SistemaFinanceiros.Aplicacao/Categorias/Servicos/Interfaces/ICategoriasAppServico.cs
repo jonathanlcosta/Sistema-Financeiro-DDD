@@ -15,9 +15,8 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces
         CategoriaResponse Inserir(CategoriaInserirRequest categoriaInserirRequest);
         CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest);
         void Excluir(int id); 
-        string ListarHtml();
-        Stream ListarPdf();
         void UploadExcel(Stream arquivo);
+        HttpResponseMessage ExportarCategoriasExcel();
 
     }
 }

@@ -20,6 +20,8 @@ namespace SistemaFinanceiros.Dominio.Genericos
         PaginacaoConsulta<T> Listar(IQueryable<T> query, int? pagina, int quantidade);
 
         IQueryable<T> Query();
+
+        IList<T> QueryList();
         
     }
 }

@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Http.Headers;
 using AutoMapper;
-using IronPdf;
-using NHibernate;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces;
-using SistemaFinanceiros.Aplicacao.TemplatesTexto.Servicos.Interfaces;
 using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
@@ -18,7 +14,6 @@ using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
-using static IronPdf.PdfPrintOptions;
 
 namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
 {
@@ -29,16 +24,14 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
         private readonly ISistemaFinanceirosServico sistemaFinanceirosServico;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
-        private readonly IGeradorTemplateTexto geradorTemplateTexto;
         public CategoriasAppServico(ICategoriasServico categoriasServico, ICategoriasRepositorio categoriasRepositorio,
-         ISistemaFinanceirosServico sistemaFinanceirosServico, IMapper mapper, IUnitOfWork unitOfWork, IGeradorTemplateTextoFactory geradorTemplateTextoFactory)
+         ISistemaFinanceirosServico sistemaFinanceirosServico, IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.categoriasRepositorio = categoriasRepositorio;
             this.categoriasServico = categoriasServico;
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.geradorTemplateTexto = geradorTemplateTextoFactory.Recuperar("Categorias/Templates/categorias-template-pdf.html");
         }
         public CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest)
         {
@@ -103,35 +96,6 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             return response;
         }
 
-        public string ListarHtml()
-        {
-            IList<Categoria> categorias = categoriasRepositorio.Query().ToList();
-
-            return geradorTemplateTexto.Executar(new { Usuario = "Jos� das Couves", Categorias = categorias });
-        }
-
-        public Stream ListarPdf()
-        {
-            var html = ListarHtml();
-
-            if (string.IsNullOrWhiteSpace(html))
-                return null;
-
-            var opcoesImpressao = new PdfPrintOptions()
-            {
-                MarginTop = 15,
-                MarginBottom = 15,
-                MarginLeft = 15,
-                MarginRight = 15,
-                PaperOrientation = PdfPaperOrientation.Portrait
-            };
-
-            var pdf = HtmlToPdf.StaticRenderHtmlAsPdf(html, PrintOptions: opcoesImpressao);
-
-            pdf.Stream.Position = 0;
-            return pdf.Stream;
-        }
-
         public CategoriaResponse Recuperar(int id)
         {
             var categoria = categoriasServico.Validar(id);
@@ -171,5 +135,40 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
                 throw;
             }
         }
+
+
+        public HttpResponseMessage ExportarCategoriasExcel()
+        {
+            
+                IList<Categoria> categorias = categoriasRepositorio.QueryList().ToList();
+
+                var workbook = new HSSFWorkbook();
+                var sheet = workbook.CreateSheet("Categorias");
+
+                var row = sheet.CreateRow(0);
+                row.CreateCell(0).SetCellValue("ID");
+                row.CreateCell(1).SetCellValue("Nome");
+                row.CreateCell(1).SetCellValue("Nome Sistema Financeiro");
+
+                for (int i = 0; i < categorias.Count; i++)
+                {
+                    var categoria = categorias[i];
+                    row = sheet.CreateRow(i + 1);
+                    row.CreateCell(0).SetCellValue(categoria.Id);
+                    row.CreateCell(1).SetCellValue(categoria.Nome);
+                    row.CreateCell(2).SetCellValue(categoria.SistemaFinanceiro.Nome);
+                }
+
+                var memoryStream = new MemoryStream();
+                workbook.Write(memoryStream);
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new ByteArrayContent(memoryStream.ToArray());
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+                response.Content.Headers.ContentDisposition.FileName = "categorias.xlsx";
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+                return response;
+            }
+    
     }
-}
+    }

@@ -53,6 +53,11 @@ namespace SistemaFinanceiros.Infra.Genericos
             return session.Query<T>();
         }
 
+         public IList<T> QueryList()
+        {
+            return session.Query<T>().ToList();
+        }
+
 
         public T Recuperar(int id)
         {
