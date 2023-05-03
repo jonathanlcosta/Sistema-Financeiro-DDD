@@ -1,7 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces;
@@ -103,38 +105,37 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             return response;
         }
 
-        public void UploadExcel(Stream arquivo)
+        public void UploadExcel(IFormFile file)
+{
+    try
+    {
+        unitOfWork.BeginTransaction();
+
+        var planilha = new XSSFWorkbook(file.OpenReadStream());
+        var folha = planilha.GetSheetAt(0);
+        List<Categoria> categorias = new List<Categoria>();
+
+        for (int row = 1; row <= folha.LastRowNum; row++)
         {
-             try
+            if (folha.GetRow(row) != null)
             {
-                unitOfWork.BeginTransaction();
-
-                var planilha = new XSSFWorkbook(arquivo);
-                var folha = planilha.GetSheetAt(0);
-                List<Categoria> categorias = new List<Categoria>();
-
-                for (int row = 1; row <= folha.LastRowNum; row++)
-                {
-                    if (folha.GetRow(row) != null)
-                    {
-                        IRow linha = folha.GetRow(row);
-                        string nome = linha.GetCell(0).StringCellValue;
-                        string sistemaFinanceiro = linha.GetCell(1).StringCellValue;
-                        SistemaFinanceiro sistema = new SistemaFinanceiro();
-                        Categoria categoria = new Categoria(nome, sistema);
-                        categorias.Add(categoria);
-                    }
-                }
-
-                categoriasRepositorio.Inserir(categorias);
-                unitOfWork.Commit();
-            }
-            catch
-            {
-                unitOfWork.Rollback();
-                throw;
+                IRow linha = folha.GetRow(row);
+                string nome = linha.GetCell(0).StringCellValue;
+                Categoria categoria = new Categoria(nome);
+                categorias.Add(categoria);
             }
         }
+
+        categoriasRepositorio.Inserir(categorias);
+        unitOfWork.Commit();
+    }
+    catch
+    {
+        unitOfWork.Rollback();
+        throw;
+    }
+}
+
 
 
         public HttpResponseMessage ExportarCategoriasExcel()
@@ -169,6 +170,69 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
                 return response;
             }
+        
+        public Stream ListarExcel()
+        {
+            try
+            {
+                IList<Categoria> categorias = categoriasRepositorio.Query().ToList();
+
+                IWorkbook planilha = new XSSFWorkbook();
+                ISheet folha = planilha.CreateSheet("Categorias");
+
+                IRow cabecalho = folha.CreateRow(0);
+                cabecalho.CreateCell(0).SetCellValue("Nome Categoria");
+                cabecalho.CreateCell(1).SetCellValue("Nome Sistema Financeiro");
+                cabecalho.CreateCell(2).SetCellValue("Dia do fechamento do sistema");
+
+                var cellStyle = planilha.CreateCellStyle();
+                cellStyle.BorderLeft = BorderStyle.Medium;
+                cellStyle.BorderRight = BorderStyle.Medium;
+                cellStyle.BorderTop = BorderStyle.Medium;
+                cellStyle.BorderBottom = BorderStyle.Medium;
+
+                foreach (Categoria categoria in categorias)
+                {
+                    int indiceDeLinha = 1;
+                    IRow linha = folha.CreateRow(indiceDeLinha);
+                    linha.CreateCell(0).SetCellValue(categoria.Nome);
+                    linha.GetCell(0).CellStyle = cellStyle;
+
+                    linha.CreateCell(1).SetCellValue(categoria.SistemaFinanceiro.Nome);
+                    linha.GetCell(1).CellStyle = cellStyle;
+
+                    linha.CreateCell(2).SetCellValue(categoria.SistemaFinanceiro.DiaFechamento);
+                    linha.GetCell(2).CellStyle = cellStyle;
+                }
+
+                var fontStyleCabecalho = planilha.CreateFont();
+                fontStyleCabecalho.FontHeightInPoints = 16;
+                fontStyleCabecalho.Boldweight = (short)FontBoldWeight.Bold;
+                fontStyleCabecalho.Color = HSSFColor.White.Index;
+
+                var cellStyleCabecalho = planilha.CreateCellStyle();
+                cellStyleCabecalho.FillForegroundColor = HSSFColor.DarkBlue.Index;
+                cellStyleCabecalho.FillPattern = FillPattern.SolidForeground;
+                cellStyleCabecalho.SetFont(fontStyleCabecalho);
+
+                for (int coluna = 0; coluna <= cabecalho.LastCellNum - 1; coluna++)
+                {
+                    cabecalho.GetCell(coluna).CellStyle = cellStyleCabecalho;
+                    folha.AutoSizeColumn(coluna);
+                }
+
+                var memoryStream = new MemoryStream();
+                planilha.Write(memoryStream);
+                var bytes = memoryStream.ToArray();
+                return new MemoryStream(bytes);
+            }
+            catch
+            {
+                unitOfWork.Rollback();
+
+                throw;
+            }
+        }
     
     }
     }

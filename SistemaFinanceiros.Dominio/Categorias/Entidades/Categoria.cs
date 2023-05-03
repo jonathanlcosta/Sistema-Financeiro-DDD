@@ -20,6 +20,11 @@ namespace SistemaFinanceiros.Dominio.Categorias.Entidades
 
         protected Categoria(){}
 
+        public Categoria(string nome)
+        {
+            SetNome(nome);
+        }
+
         public virtual void SetNome(string nome)
         {
             if (String.IsNullOrEmpty(nome))

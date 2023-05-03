@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
 using SistemaFinanceiros.Dominio.util;
@@ -15,8 +16,9 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces
         CategoriaResponse Inserir(CategoriaInserirRequest categoriaInserirRequest);
         CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest);
         void Excluir(int id); 
-        void UploadExcel(Stream arquivo);
+        void UploadExcel(IFormFile file);
         HttpResponseMessage ExportarCategoriasExcel();
+        Stream ListarExcel();
 
     }
 }
