@@ -75,18 +75,36 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
 
         [HttpPost]
         [Route("excel")]
-        public ActionResult UploadExcel()
+        public ActionResult UploadExcel(IFormFile file)
         {
-            var arquivos = Request.Form?.Files;
-
-            if (arquivos != null && arquivos.Count > 0)
+            if (file != null && file.Length > 0)
             {
-                var file = arquivos[0].OpenReadStream();
                 categoriasAppServico.UploadExcel(file);
                 return Ok();
             }
             else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Route("excel")]
+        public ActionResult ListarExcel()
+        {
+            var planilha = categoriasAppServico.ListarExcel();
+
+            if (planilha != null)
+            {
+                FileStreamResult result = new FileStreamResult(planilha, "application/octet-stream")
+                {
+                    FileDownloadName = "Categorias.xlsx"
+                };
+                return result;
+            }
+            else
                 return NotFound();
         }
+
     }
 }
