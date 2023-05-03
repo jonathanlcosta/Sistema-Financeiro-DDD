@@ -62,39 +62,15 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
         }
 
         [HttpGet]
-        [Route("pdf")]
-        public ActionResult ListarPdf()
+        [Route("ExportarExcel")]
+        public FileResult ExportarExcel()
         {
-            Stream conteudo = categoriasAppServico.ListarPdf();
+           var response = categoriasAppServico.ExportarCategoriasExcel();
+            var fileContent = response.Content.ReadAsByteArrayAsync().Result;
+            var contentType = response.Content.Headers.ContentType.MediaType;
+            var fileName = response.Content.Headers.ContentDisposition.FileName;
 
-            // Se retornou conte�do, ent�o retorna um FileStreamResult com o
-            // conte�do do PDF, sen�o retorna 404.
-            if (conteudo != null)
-                return new FileStreamResult(conteudo, "application/pdf");
-            else
-                return NotFound();
-        }
-
-        /// <summary>
-        /// Listar categorias em formato HTML
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("html")]
-        public ActionResult ListarHtml()
-        {
-            string conteudo = categoriasAppServico.ListarHtml();
-
-            if (conteudo != null)
-            {
-                return new ContentResult
-                {
-                    ContentType = "text/html",
-                    Content = conteudo
-                };
-            }
-            else
-                return NotFound();
+            return File(fileContent, contentType, fileName);
         }
 
         [HttpPost]
