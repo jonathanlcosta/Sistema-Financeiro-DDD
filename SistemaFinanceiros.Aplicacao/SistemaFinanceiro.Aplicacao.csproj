@@ -20,7 +20,6 @@
    <ItemGroup>
      <ProjectReference Include="..\SistemaFinanceiros.DataTransfer\SistemaFinanceiro.DataTransfer.csproj" />
      <ProjectReference Include="..\SistemaFinanceiros.Dominio\SistemaFinanceiro.Dominio.csproj" />
-     <ProjectReference Include="..\SistemaFinanceiros.Infra\SistemaFinanceiro.Infra.csproj" />
    </ItemGroup>
 
 </Project>

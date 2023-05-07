@@ -9,7 +9,7 @@ using SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas;
 using SistemaFinanceiros.Dominio.util;
 using SistemaFinanceiros.Infra.Genericos;
 
-namespace SistemaFinanceiros.Infra.Despesas
+namespace SistemaFinanceiros.Infra.Despesas.Repositorios
 {
     public class DespesasConsultasRepositorio : RepositorioDapper<DespesasUsuarioNaoPagasMesesAnterior>, IDespesasConsultasRepositorio
     {
