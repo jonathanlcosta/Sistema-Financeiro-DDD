@@ -14,9 +14,6 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Profiles
         public DespesasProfile()
         {
         CreateMap<Despesa, DespesaResponse>();
-        CreateMap<Despesa, DespesaListarRequest>();
-        CreateMap<DespesaInserirRequest, Despesa>();
-        CreateMap<DespesaEditarRequest, Despesa>(); 
         }
     }
 }

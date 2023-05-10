@@ -14,9 +14,6 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Profiles
         public SistemaFinanceirosProfile()
         {
         CreateMap<SistemaFinanceiro, SistemaFinanceiroResponse>();
-        CreateMap<SistemaFinanceiro, SistemaFinanceiroListarRequest>();
-        CreateMap<SistemaFinanceiroInserirRequest, SistemaFinanceiro>();
-        CreateMap<SistemaFinanceiroEditarRequest, SistemaFinanceiro>();
         }
     }
 }

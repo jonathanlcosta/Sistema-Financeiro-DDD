@@ -15,9 +15,6 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Profiles
         {
         CreateMap<Categoria, CategoriaResponse>()
         .ForMember(x => x.idSistemaFinanceiro, m => m.MapFrom(y => y.SistemaFinanceiro!.Id));
-        CreateMap<Categoria, CategoriaListarRequest>();
-        CreateMap<CategoriaInserirRequest, Categoria>();
-        CreateMap<CategoriaEditarRequest, Categoria>();
         }
     }
 }
