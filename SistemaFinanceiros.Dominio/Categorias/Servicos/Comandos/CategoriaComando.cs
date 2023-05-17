@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SistemaFinanceiros.DataTransfer.Categorias.Request
+namespace SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos
 {
-    public class CategoriaInserirRequest
+    public class CategoriaComando
     {
         public string Nome { get; set; }
         public int IdSistemaFinanceiro { get; set; }

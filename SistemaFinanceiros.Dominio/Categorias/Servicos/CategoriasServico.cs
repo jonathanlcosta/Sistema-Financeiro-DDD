@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Repositorios;
+using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
@@ -19,27 +20,22 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
             this.categoriasRepositorio = categoriasRepositorio;
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
         }
-        public Categoria Editar(int id, string nome, int idSistemaFinanceiro)
+        public Categoria Editar(int id, CategoriaComando comando)
         {
-            var sistemaFinanceiro = sistemaFinanceirosServico.Validar(idSistemaFinanceiro);
+            var sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
             var categoria = Validar(id);
-            categoria.SetNome(nome);
+            categoria.SetNome(comando.Nome);
             categoria.SetSistema(sistemaFinanceiro);
             categoria = categoriasRepositorio.Editar(categoria);
             return categoria;
         }
 
-        public Categoria Inserir(Categoria categoria)
+        public Categoria Inserir(CategoriaComando comando)
         {
-           var response = categoriasRepositorio.Inserir(categoria);
+        SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
+        Categoria categoria = new Categoria(comando.Nome, sistemaFinanceiro);
+        var response = categoriasRepositorio.Inserir(categoria);
            return response;
-        }
-
-        public Categoria Instanciar(string nome, int idSistemaFinanceiro)
-        {
-           SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(idSistemaFinanceiro);
-           var categoria = new Categoria(nome, sistemaFinanceiro);
-           return categoria;
         }
 
         public Categoria Validar(int id)

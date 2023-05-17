@@ -6,6 +6,7 @@ using AutoMapper;
 using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
+using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
 
 namespace SistemaFinanceiros.Aplicacao.Categorias.Profiles
 {
@@ -15,6 +16,8 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Profiles
         {
         CreateMap<Categoria, CategoriaResponse>()
         .ForMember(x => x.idSistemaFinanceiro, m => m.MapFrom(y => y.SistemaFinanceiro!.Id));
+        CreateMap<CategoriaInserirRequest, CategoriaComando>();
+        CreateMap<CategoriaEditarRequest, CategoriaComando>();
         }
     }
 }

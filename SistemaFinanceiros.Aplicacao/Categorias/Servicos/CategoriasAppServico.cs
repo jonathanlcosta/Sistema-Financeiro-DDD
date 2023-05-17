@@ -12,6 +12,7 @@ using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Repositorios;
+using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
@@ -35,12 +36,13 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest)
+        public CategoriaResponse Editar(int id, CategoriaEditarRequest request)
         {
+            var comando = mapper.Map<CategoriaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var categoria = categoriasServico.Editar(id, categoriaEditarRequest.Nome, categoriaEditarRequest.idSistemaFinanceiro);
+                Categoria categoria = categoriasServico.Editar(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);;
             }
@@ -67,13 +69,13 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             }
         }
 
-        public CategoriaResponse Inserir(CategoriaInserirRequest categoriaInserirRequest)
+        public CategoriaResponse Inserir(CategoriaInserirRequest request)
         {
-            var categoria = categoriasServico.Instanciar(categoriaInserirRequest.Nome, categoriaInserirRequest.idSistemaFinanceiro);
+            var comando = mapper.Map<CategoriaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                categoria = categoriasServico.Inserir(categoria);
+                Categoria categoria = categoriasServico.Inserir(comando);
                 unitOfWork.Commit();
                 return mapper.Map<CategoriaResponse>(categoria);
             }
