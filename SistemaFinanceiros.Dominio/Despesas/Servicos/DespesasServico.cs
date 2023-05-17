@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
+using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
+using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 
 namespace SistemaFinanceiros.Dominio.Despesas.Servicos
@@ -52,37 +55,30 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
             };
         }
 
-        public Despesa Editar(int id, string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria)
+        public Despesa Editar(int id, DespesaComando comando)
         {
-            var categoria = categoriasServico.Validar(idCategoria);
-            var despesa = Validar(id);
-            if(!string.IsNullOrWhiteSpace(nome) && despesa.Nome != nome) despesa.SetNome(nome);
-            despesa.SetValor(valor);
-            despesa.SetMes(mes);
-            despesa.SetAno(ano);
-            despesa.SetTipoDespesa(tipoDespesa);
-            despesa.SetDataCadastro(dataCadastro);
-            despesa.SetDataAlteracao(dataAlteracao);
-            despesa.SetDataVencimento(dataVencimento);
-            despesa.SetPago(pago);
-            despesa.SetDespesaAtrasada(despesaAtrasada);
+            Categoria categoria = categoriasServico.Validar(comando.IdCategoria);
+            Despesa despesa = Validar(id);
+            despesa.SetNome(comando.Nome);
+            despesa.SetValor(comando.Valor);
+            despesa.SetTipoDespesa(comando.TipoDespesa);
+            despesa.SetDataVencimento(comando.DataVencimento);
+            despesa.SetPago(comando.Pago);
+            despesa.SetDespesaAtrasada(comando.DespesaAtrasada);
             despesa.SetCategoria(categoria);
             despesa = despesasRepositorio.Editar(despesa);
             return despesa;
 
         }
 
-        public Despesa Inserir(Despesa despesa)
+        public Despesa Inserir(DespesaComando comando)
         {
+            Categoria categoria = categoriasServico.Validar(comando.IdCategoria);
+            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
+            Despesa despesa = new Despesa(comando.Nome, comando.Valor, comando.TipoDespesa, comando.DataVencimento, comando.Pago, comando.DespesaAtrasada,
+            categoria, usuario);
             var response = despesasRepositorio.Inserir(despesa);
             return response;
-        }
-
-        public Despesa Instanciar(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro, DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada, int idCategoria, int IdUsuario)
-        {   var categoria = categoriasServico.Validar(idCategoria);
-            var usuario = usuariosServico.Validar(IdUsuario);
-            var despesa = new Despesa(nome, valor, mes, ano, tipoDespesa, dataCadastro, dataAlteracao, dataVencimento, pago, despesaAtrasada, categoria, usuario);
-            return despesa;
         }
 
         public Despesa Validar(int id)

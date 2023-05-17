@@ -7,6 +7,7 @@ using SistemaFinanceiros.DataTransfer.Despesas.Response;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
+using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
 
@@ -36,15 +37,13 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             return despesasServico.CarregaGraficos(email);
         }
 
-        public DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest)
+        public DespesaResponse Editar(int id, DespesaEditarRequest request)
         {
+             var comando = mapper.Map<DespesaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var despesa = despesasServico.Editar(id, despesaEditarRequest.Nome, despesaEditarRequest.Valor, despesaEditarRequest.Mes, 
-           despesaEditarRequest.Ano, despesaEditarRequest.TipoDespesa, despesaEditarRequest.DataCadastro,
-           despesaEditarRequest.DataAlteracao, despesaEditarRequest.DataVencimento, despesaEditarRequest.Pago,
-           despesaEditarRequest.DespesaAtrasada, despesaEditarRequest.idCategoria);
+                var despesa = despesasServico.Editar(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<DespesaResponse>(despesa);;
             }
@@ -71,16 +70,14 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             }
         }
 
-        public DespesaResponse Inserir(DespesaInserirRequest despesaInserirRequest)
+        public DespesaResponse Inserir(DespesaInserirRequest request)
         {
-             var despesa = despesasServico.Instanciar(despesaInserirRequest.Nome, despesaInserirRequest.Valor, despesaInserirRequest.Mes, 
-           despesaInserirRequest.Ano, despesaInserirRequest.TipoDespesa, despesaInserirRequest.DataCadastro,
-           despesaInserirRequest.DataAlteracao, despesaInserirRequest.DataVencimento, despesaInserirRequest.Pago,
-           despesaInserirRequest.DespesaAtrasada, despesaInserirRequest.idCategoria, despesaInserirRequest.IdUsuario);
+            var comando = mapper.Map<DespesaComando>(request);
+             
             try
             {
                 unitOfWork.BeginTransaction();
-                despesa = despesasServico.Inserir(despesa);
+                Despesa despesa = despesasServico.Inserir(comando);
                 unitOfWork.Commit();
                 return mapper.Map<DespesaResponse>(despesa);
             }

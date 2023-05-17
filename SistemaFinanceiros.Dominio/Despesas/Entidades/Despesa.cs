@@ -25,17 +25,17 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
         public virtual bool DespesaAtrasada { get; protected set; }
         public virtual Categoria Categoria { get; protected set; }
 
-        public Despesa(string nome, decimal valor, int mes, int ano, EnumTipoDespesa tipoDespesa, DateTime dataCadastro,
-        DateTime dataAlteracao, DateTime dataVencimento, bool pago, bool despesaAtrasada,
+        public Despesa(string nome, decimal valor, EnumTipoDespesa tipoDespesa,
+        DateTime dataVencimento, bool pago, bool despesaAtrasada,
         Categoria categoria, Usuario usuario)
         {
             SetNome(nome);
             SetValor(valor);
-            SetMes(mes);
-            SetAno(ano);
+            SetMes();
+            SetAno();
             SetTipoDespesa(tipoDespesa);
-            SetDataCadastro(dataCadastro);
-            SetDataAlteracao(dataAlteracao);
+            SetDataCadastro();
+            SetDataAlteracao();
             SetDataVencimento(dataVencimento);
             SetPago(pago);
             SetDespesaAtrasada(despesaAtrasada);
@@ -68,17 +68,17 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
             Valor = valor;
         }
 
-        public virtual void SetMes(int mes)
+        public virtual void SetMes()
         {
              var data = DateTime.UtcNow;
-             mes = data.Month;
+             var mes = data.Month;
             Mes = mes;
         }
 
-        public virtual void SetAno(int ano)
+        public virtual void SetAno()
         {   
             var data = DateTime.UtcNow;
-            ano = data.Year;
+            var ano = data.Year;
             Ano = ano;
         }
 
@@ -87,17 +87,15 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
             TipoDespesa = tipoDespesa;
         }
 
-         public virtual void SetDataCadastro(DateTime dataCadastro)
+         public virtual void SetDataCadastro()
         {
             var data = DateTime.UtcNow;
-            dataCadastro = data;
-            DataCadastro = dataCadastro;
+            DataCadastro = data;
         }
 
-        public virtual void SetDataAlteracao(DateTime dataAlteracao)
+        public virtual void SetDataAlteracao()
         {
              var data = DateTime.UtcNow;
-            dataAlteracao = data;
             DataAlteracao = data;
         }
 

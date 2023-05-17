@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
 
-namespace SistemaFinanceiros.DataTransfer.Despesas.Request
+namespace SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos
 {
-    public class DespesaInserirRequest
+    public class DespesaComando
     {
-         public string Nome { get; set; }
+        public string Nome { get; set; }
         public decimal Valor { get; set; }
         public int IdUsuario { get; set; }
         public EnumTipoDespesa TipoDespesa { get; set; }
