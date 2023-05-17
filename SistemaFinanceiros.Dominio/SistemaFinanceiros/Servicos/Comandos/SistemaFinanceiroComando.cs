@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Request
+namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Comandos
 {
-    public class SistemaFinanceiroEditarRequest
+    public class SistemaFinanceiroComando
     {
         public string Nome { get; set; }
     }

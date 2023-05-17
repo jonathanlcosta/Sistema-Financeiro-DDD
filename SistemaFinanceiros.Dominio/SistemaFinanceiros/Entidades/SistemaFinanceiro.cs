@@ -18,15 +18,15 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
         public virtual int MesCopia { get; protected set; }
         public virtual int AnoCopia { get; protected set; }
 
-        public SistemaFinanceiro(string nome, int mes, int ano, int diafechamento, bool gerarCopiaDespesa, int mesCopia, int anoCopia)
+        public SistemaFinanceiro(string nome)
         {
             SetNome(nome);
-            SetAno(ano);
-            SetDiaFechamento(diafechamento);
-            SetGerarCopiaDespesa(gerarCopiaDespesa);
-            SetMes(mes);
-            SetMesCopia(mesCopia);
-            SetAnoCopia(anoCopia);
+            SetAno();
+            SetDiaFechamento();
+            SetGerarCopiaDespesa();
+            SetMes();
+            SetMesCopia();
+            SetAnoCopia();
         }
 
         public SistemaFinanceiro()
@@ -43,43 +43,43 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
             Nome = nome;
         }
 
-        public virtual void SetAno(int ano)
+        public virtual void SetAno()
         {
             var data = DateTime.Now;
-            ano = data.Year;
+            var ano = data.Year;
             this.Ano = ano;
         }
 
-        public virtual void SetDiaFechamento(int diafechamento)
+        public virtual void SetDiaFechamento()
         {
-            diafechamento = 1;
-            this.DiaFechamento = diafechamento;
+            var diafechamento = 1;
+            DiaFechamento = diafechamento;
         }
 
-        public virtual void SetMes(int mes)
+        public virtual void SetMes()
         {
             var data = DateTime.Now;
-            mes = data.Month;
+            var mes = data.Month;
             Mes = mes;
         }
 
-        public virtual void SetAnoCopia(int anoCopia)
+        public virtual void SetAnoCopia()
         {
             var data = DateTime.Now;
-            anoCopia = data.Year;
+            var anoCopia = data.Year;
             AnoCopia = anoCopia;
         }
 
-        public virtual void SetMesCopia(int mesCopia)
+        public virtual void SetMesCopia()
         {
             var data = DateTime.Now;
-            mesCopia = data.Month;
+            var mesCopia = data.Month;
             MesCopia = mesCopia;
         }
 
-        public virtual void SetGerarCopiaDespesa(bool gerarCopiaDespesa)
+        public virtual void SetGerarCopiaDespesa()
         {
-            gerarCopiaDespesa = true;
+            var gerarCopiaDespesa = true;
             GerarCopiaDespesa = gerarCopiaDespesa;
         }
     }

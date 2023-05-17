@@ -1,11 +1,11 @@
 using AutoMapper;
-using NHibernate;
 using SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Request;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Response;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios;
+using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
 
@@ -25,16 +25,13 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             this.unitOfWork = unitOfWork;
             this.sistemaFinanceirosRepositorio = sistemaFinanceirosRepositorio;
         }
-        public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest)
+        public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest request)
         {
-           
+           var comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, sistemaFinanceiroEditarRequest.Nome,
-            sistemaFinanceiroEditarRequest.Mes, sistemaFinanceiroEditarRequest.Ano, sistemaFinanceiroEditarRequest.DiaFechamento,
-            sistemaFinanceiroEditarRequest.GerarCopiaDespesa, sistemaFinanceiroEditarRequest.MesCopia, 
-            sistemaFinanceiroEditarRequest.AnoCopia
+                var sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, comando
             );
                 unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);;
@@ -62,16 +59,13 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             }
         }
 
-        public SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest sistemaFinanceiroInserirRequest)
+        public SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest request)
         {
-            var sistemaFinanceiro = sistemaFinanceirosServico.Instanciar(sistemaFinanceiroInserirRequest.Nome,
-            sistemaFinanceiroInserirRequest.Mes, sistemaFinanceiroInserirRequest.Ano, sistemaFinanceiroInserirRequest.DiaFechamento,
-            sistemaFinanceiroInserirRequest.GerarCopiaDespesa, sistemaFinanceiroInserirRequest.MesCopia,
-            sistemaFinanceiroInserirRequest.AnoCopia);
+            var comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                sistemaFinanceiro = sistemaFinanceirosServico.Inserir(sistemaFinanceiro);
+                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Inserir(comando);
                 unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
             }
