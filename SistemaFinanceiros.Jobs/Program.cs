@@ -79,9 +79,9 @@ var despesas = JobBuilder.Create<DespesasJob>()
     .UsingJobData("ConnectionString", connectionString)
     .Build();
 
-scheduler.ScheduleJob(despesas, TriggerBuilder.Create().WithCronSchedule("0 * * ? * *").Build());
+await scheduler.ScheduleJob(despesas, TriggerBuilder.Create().WithCronSchedule("0 * * ? * *").Build());
 
-scheduler.Start();
+await scheduler.Start();
 
 var app = builder.Build();
 
