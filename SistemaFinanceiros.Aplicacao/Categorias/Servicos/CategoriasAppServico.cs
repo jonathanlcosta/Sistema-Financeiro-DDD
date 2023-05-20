@@ -12,6 +12,7 @@ using SistemaFinanceiros.DataTransfer.Categorias.Request;
 using SistemaFinanceiros.DataTransfer.Categorias.Response;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Repositorios;
+using SistemaFinanceiros.Dominio.Categorias.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
@@ -86,14 +87,11 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             }
         }
 
-        public PaginacaoConsulta<CategoriaResponse> Listar(int? pagina, int quantidade, CategoriaListarRequest categoriaListarRequest)
+        public PaginacaoConsulta<CategoriaResponse> Listar(int? pagina, int quantidade, CategoriaListarRequest request)
         {
-          if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
-            IQueryable<Categoria> query = categoriasRepositorio.Query();
-            if(categoriaListarRequest is null)
-            throw new Exception();
-            if (!string.IsNullOrEmpty(categoriaListarRequest.Nome))
-                query = query.Where(p => p.Nome.Contains(categoriaListarRequest.Nome));
+            CategoriaListarFiltro filtro = mapper.Map<CategoriaListarFiltro>(request);
+            IQueryable<Categoria> query = categoriasRepositorio.Filtrar(filtro);
+
             PaginacaoConsulta<Categoria> categorias = categoriasRepositorio.Listar(query, pagina, quantidade);
             PaginacaoConsulta<CategoriaResponse> response;
             response = mapper.Map<PaginacaoConsulta<CategoriaResponse>>(categorias);
