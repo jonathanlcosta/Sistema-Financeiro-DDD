@@ -48,9 +48,9 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
        public virtual void SetNome(string nome)
         {
             if (String.IsNullOrEmpty(nome))
-                throw new ArgumentNullException("O nome não pode ser vazio");
+                throw new ArgumentException("O nome não pode ser vazio");
             if (nome.Length > 100)
-                throw new ArgumentOutOfRangeException("O nome nao pode ter mais que 100 caracteres");
+                throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
             Nome = nome;
         }
 
@@ -103,7 +103,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
         {
             if (data == DateTime.MinValue)
             {
-                throw new ArgumentNullException("A data não foi informada.");
+                throw new ArgumentException("A data não foi informada.");
             }
             DataVencimento = data;
         }

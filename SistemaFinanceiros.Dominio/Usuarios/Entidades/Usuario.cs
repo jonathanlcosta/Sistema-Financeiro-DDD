@@ -44,9 +44,9 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         public virtual void SetCpf(string cpf)
         {
             if (String.IsNullOrEmpty(cpf))
-                throw new ArgumentNullException("O CPF não pode ser vazio.");
+                throw new ArgumentException("O CPF não pode ser vazio.");
             if (cpf.Length != 11)
-                throw new ArgumentOutOfRangeException("O CPF deve conter 11 caracteres.");
+                throw new ArgumentException("O CPF deve conter 11 caracteres.");
             CPF = cpf.Replace(".", "").Replace("/", "").Replace("-", "");
         }
 
@@ -64,9 +64,9 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         public virtual void SetNome(string nome)
         {
             if (String.IsNullOrEmpty(nome))
-                throw new ArgumentNullException("O nome não pode ser vazio");
+                throw new ArgumentException("O nome não pode ser vazio");
             if (nome.Length > 100)
-                throw new ArgumentOutOfRangeException("O nome nao pode ter mais que 100 caracteres");
+                throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
             Nome = nome;
         }
 
@@ -74,29 +74,29 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         {
             if (string.IsNullOrEmpty(senha) || string.IsNullOrWhiteSpace(senha))
               {
-                  throw new Exception("Senha nula ou com apenas espaços em branco");
+                  throw new ArgumentException("Senha nula ou com apenas espaços em branco");
               }
               if (senha.Length < 6 || senha.Length > 20)
               {
-                  throw new Exception("Senha com menos de 6 ou mais de 20 caracteres");
+                  throw new ArgumentException("Senha com menos de 6 ou mais de 20 caracteres");
               }
               // Verifica se a senha possui pelo menos uma letra maiúscula, uma letra minúscula,
               if (!senha.Any(c => char.IsUpper(c)))
               {
-                  throw new Exception("Senha precisa ter pelo menos um caractere maiúsculo");
+                  throw new ArgumentException("Senha precisa ter pelo menos um caractere maiúsculo");
               }
               if (!senha.Any(c => char.IsLower(c)))
               {
-                  throw new Exception("Senha precisa ter pelo menos um caractere minúsculo");
+                  throw new ArgumentException("Senha precisa ter pelo menos um caractere minúsculo");
               }
               // um caractere especial e um número
               if (!senha.Any(c => char.IsSymbol(c) || char.IsPunctuation(c)))
               {
-                  throw new Exception("Senha precisa ter pelo menos um caractere especial");
+                  throw new ArgumentException("Senha precisa ter pelo menos um caractere especial");
               }
               if (!senha.Any(c => char.IsNumber(c)))
               {
-                  throw new Exception("Senha precisa ter pelo menos um caractere numérico");
+                  throw new ArgumentException("Senha precisa ter pelo menos um caractere numérico");
               }
             Senha = senha;
         }
