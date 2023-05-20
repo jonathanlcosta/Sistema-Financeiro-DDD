@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+   <PackageReference Include="Quartz" Version="3.6.2" />
+   <PackageReference Include="Serilog" Version="3.0.0-dev-01998" />
+   <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+    <PackageReference Include="MySql.Data" Version="8.0.30" />
+    <PackageReference Include="MySqlConnector" Version="2.1.13" />
+    <PackageReference Include="Nhibernate" Version="5.3.13" />
+      <PackageReference Include="Scrutor" Version="4.2.0" />
+       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaFinanceiros.Aplicacao\SistemaFinanceiro.Aplicacao.csproj" />
+    <ProjectReference Include="..\SistemaFinanceiros.DataTransfer\SistemaFinanceiro.DataTransfer.csproj" />
+    <ProjectReference Include="..\SistemaFinanceiros.Dominio\SistemaFinanceiro.Dominio.csproj" />
+    <ProjectReference Include="..\SistemaFinanceiros.Infra\SistemaFinanceiro.Infra.csproj" />
+  </ItemGroup>
+
+</Project>
