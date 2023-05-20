@@ -69,8 +69,8 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         }
 
         [HttpGet("ListarDespesasNaoPagasMesesAtras")]
-        public ActionResult<PaginacaoConsulta<DespesaResponse>> ListarDespesasNaoPagasMesesAtras(int pagina, int quantidade,[FromQuery] DespesaListarRequest despesaListarRequest)
-        {    var response = despesasAppServico.ListarDespesas(pagina, quantidade, despesaListarRequest);
+        public ActionResult<PaginacaoConsulta<DespesaResponse>> ListarDespesasNaoPagasMesesAtras([FromQuery] DespesaListarRequest despesaListarRequest)
+        {    var response = despesasAppServico.ListarDespesas(despesaListarRequest);
             return Ok(response);
         }
     }

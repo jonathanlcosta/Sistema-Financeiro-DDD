@@ -99,14 +99,11 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             return response;
         }
 
-        public PaginacaoConsulta<DespesaResponse> ListarDespesas(int? pagina, int quantidade, DespesaListarRequest request)
+        public PaginacaoConsulta<DespesaResponse> ListarDespesas(DespesaListarRequest request)
         {
 
-            IQueryable<Despesa> query = despesasRepositorio.Query()
-                .Where(d => d.Usuario.Email == request.emailUsuario && 
-                            d.Pago == false &&
-                            d.DataVencimento.Year == DateTime.Now.Year &&
-                            d.DataVencimento.Month == DateTime.Now.AddMonths(-1).Month);
+           DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
+            IQueryable<Despesa> query = despesasRepositorio.FiltrarDespesasAtrasadas(filtro);
 
             PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<DespesaResponse> response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);

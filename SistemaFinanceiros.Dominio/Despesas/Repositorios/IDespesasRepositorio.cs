@@ -13,6 +13,8 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios
         IList<Despesa> ListarDespesasUsuarioNaoPagasMesesAnterior(string email);
         IList<Despesa> ListarDespesasUsuario(string email);
         IQueryable<Despesa> Filtrar(DespesaListarFiltro filtro);
+         IQueryable<Despesa> FiltrarDespesasAtrasadas(DespesaListarFiltro filtro);
+
 
     }
 }

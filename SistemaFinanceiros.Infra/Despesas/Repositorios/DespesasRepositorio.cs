@@ -42,6 +42,26 @@ namespace SistemaFinanceiros.Infra.Despesas
             return query;
         }
 
+        public IQueryable<Despesa> FiltrarDespesasAtrasadas(DespesaListarFiltro filtro)
+        {
+             IQueryable<Despesa> query = Query();
+
+            if (!string.IsNullOrEmpty(filtro.Nome))
+            {
+                 query = query.Where(d => d.Nome.Contains(filtro.Nome));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.emailUsuario))
+            {
+                 query = query.Where(d => d.Usuario.Email == filtro.emailUsuario && 
+                            d.Pago == false &&
+                            d.DataVencimento.Year == DateTime.Now.Year &&
+                            d.DataVencimento.Month == DateTime.Now.AddMonths(-1).Month);
+            }
+
+            return query;
+        }
+
         public IList<Despesa> ListarDespesasUsuario(string email)
         {
             IList<Despesa> despesas = session.Query<Despesa>().Where(d => d.Usuario.Email == email).ToList();
