@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.Genericos;
 
 namespace SistemaFinanceiros.Dominio.Despesas.Repositorios
@@ -11,5 +12,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios
     {
         IList<Despesa> ListarDespesasUsuarioNaoPagasMesesAnterior(string email);
         IList<Despesa> ListarDespesasUsuario(string email);
+        IQueryable<Despesa> Filtrar(DespesaListarFiltro filtro);
+
     }
 }

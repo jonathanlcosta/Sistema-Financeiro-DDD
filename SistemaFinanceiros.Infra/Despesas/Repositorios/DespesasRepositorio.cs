@@ -10,6 +10,7 @@ using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.util;
@@ -22,6 +23,23 @@ namespace SistemaFinanceiros.Infra.Despesas
         public DespesasRepositorio(ISession session) : base (session)
         {
             
+        }
+
+        public IQueryable<Despesa> Filtrar(DespesaListarFiltro filtro)
+        {
+            IQueryable<Despesa> query = Query();
+
+            if (!string.IsNullOrEmpty(filtro.Nome))
+            {
+                 query = query.Where(d => d.Nome.Contains(filtro.Nome));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.emailUsuario))
+            {
+                 query = query.Where(d => d.Usuario.Email == filtro.emailUsuario);
+            }
+
+            return query;
         }
 
         public IList<Despesa> ListarDespesasUsuario(string email)

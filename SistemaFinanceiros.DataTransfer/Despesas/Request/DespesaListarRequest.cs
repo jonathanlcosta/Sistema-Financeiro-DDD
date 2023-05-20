@@ -10,8 +10,9 @@ namespace SistemaFinanceiros.DataTransfer.Despesas.Request
 {
     public class DespesaListarRequest : PaginacaoFiltro
     {
+         public string Nome { get; set; }
         public string emailUsuario { get; set; }
-        public DespesaListarRequest() : base(cpOrd:"emailUsuario", tpOrd: TipoOrdenacaoEnum.Asc)
+        public DespesaListarRequest() : base(cpOrd:"Nome", tpOrd: TipoOrdenacaoEnum.Asc)
         {
             
         }

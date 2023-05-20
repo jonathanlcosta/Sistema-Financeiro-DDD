@@ -7,6 +7,7 @@ using SistemaFinanceiros.DataTransfer.Despesas.Response;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
@@ -90,8 +91,8 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request)
         {
-            IQueryable<Despesa> query = despesasRepositorio.Query();
-            query = query.Where(d => d.Usuario.Email == request.emailUsuario);
+            DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
+            IQueryable<Despesa> query = despesasRepositorio.Filtrar(filtro);
             PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<DespesaResponse> response;
             response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
