@@ -11,6 +11,7 @@ using SistemaFinanceiros.DataTransfer.Usuarios.Response;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Repositorios;
+using SistemaFinanceiros.Dominio.Usuarios.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
 
@@ -66,25 +67,15 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             }
         }
 
-        public PaginacaoConsulta<UsuarioResponse> Listar(int? pagina, int quantidade, UsuarioListarRequest request)
+        public PaginacaoConsulta<UsuarioResponse> Listar(UsuarioListarRequest request)
         {
           
 
-            IQueryable<Usuario> query = usuariosRepositorio.Query();
+            UsuarioListarFiltro filtro = mapper.Map<UsuarioListarFiltro>(request);
+            IQueryable<Usuario> query = usuariosRepositorio.Filtrar(filtro);
 
-            if (!string.IsNullOrEmpty(request.Nome))
-                query = query.Where(p => p.Nome.Contains(request.Nome));
-            if (!string.IsNullOrEmpty(request.CPF))
-                query = query.Where(p => p.CPF.Contains(request.CPF));
-            if (!string.IsNullOrEmpty(request.Email))
-                query = query.Where(p => p.Email.Contains(request.Email));
 
-                if (request.idSistemaFinanceiro != 0)
-            {
-                query = query.Where(x => x.SistemaFinanceiro!.Id == request.idSistemaFinanceiro);
-            }
-
-            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<UsuarioResponse> response;
             response = mapper.Map<PaginacaoConsulta<UsuarioResponse>>(usuarios);
             return response;

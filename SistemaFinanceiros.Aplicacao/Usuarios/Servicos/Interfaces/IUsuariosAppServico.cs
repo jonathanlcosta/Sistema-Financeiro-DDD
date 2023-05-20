@@ -10,7 +10,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos.Interfaces
 {
     public interface IUsuariosAppServico
     {
-        PaginacaoConsulta<UsuarioResponse> Listar(int? pagina, int quantidade, UsuarioListarRequest usuarioListarRequest);
+        PaginacaoConsulta<UsuarioResponse> Listar(UsuarioListarRequest usuarioListarRequest);
         UsuarioResponse Recuperar(int id);
         UsuarioResponse Editar(int id, UsuarioEditarRequest usuarioEditarRequest);
         void Excluir(int id); 

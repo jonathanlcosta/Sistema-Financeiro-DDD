@@ -33,8 +33,8 @@ namespace SistemaFinanceiros.API.Controllers.Usuarios
         }
 
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<UsuarioResponse>> Listar(int pagina, int quantidade, [FromQuery] UsuarioListarRequest usuarioListarRequest)
-        {    var response = usuariosAppServico.Listar(pagina, quantidade, usuarioListarRequest);
+        public ActionResult<PaginacaoConsulta<UsuarioResponse>> Listar([FromQuery] UsuarioListarRequest usuarioListarRequest)
+        {    var response = usuariosAppServico.Listar(usuarioListarRequest);
             return Ok(response);
         }
 
