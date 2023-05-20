@@ -11,7 +11,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces
 {
     public interface ICategoriasAppServico
     {
-        PaginacaoConsulta<CategoriaResponse> Listar(int? pagina, int quantidade, CategoriaListarRequest categoriaListarRequest);
+        PaginacaoConsulta<CategoriaResponse> Listar(CategoriaListarRequest request);
         CategoriaResponse Recuperar(int id);
         CategoriaResponse Inserir(CategoriaInserirRequest categoriaInserirRequest);
         CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest);

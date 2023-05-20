@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.util;
+using SistemaFinanceiros.Dominio.util.Filtros.Enumeradores;
 
 namespace SistemaFinanceiros.Dominio.Genericos
 {
@@ -17,7 +18,7 @@ namespace SistemaFinanceiros.Dominio.Genericos
         void Excluir(T entidade);
         void Inserir(IEnumerable<T> entidades);
 
-        PaginacaoConsulta<T> Listar(IQueryable<T> query, int? pagina, int quantidade);
+         PaginacaoConsulta<T> Listar(IQueryable<T> query, int qt, int pg, string cpOrd, TipoOrdenacaoEnum tpOrd);
 
         IQueryable<T> Query();
 

@@ -21,7 +21,7 @@ namespace SistemaFinanceiros.Infra.Genericos
             var resultado = new PaginacaoConsulta<T>();
              var tasks = new List<Task>
              {
-                new Task(() => resultado.Quantidade = session.Connection.Query<int>($"SELECT COUNT(1) FROM ({query})", parametros).Single()),
+                new Task(() => resultado.Total = session.Connection.Query<int>($"SELECT COUNT(1) FROM ({query})", parametros).Single()),
                 new Task(() => resultado.Registros = session.Connection.Query<T>(GerarQueryPaginacao(query, pagina, quantidade), parametros).ToList())
              };
              Parallel.ForEach(tasks, q => q.RunSynchronously());

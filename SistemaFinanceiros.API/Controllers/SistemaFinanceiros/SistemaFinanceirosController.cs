@@ -33,8 +33,8 @@ namespace SistemaFinanceiros.API.Controllers.SistemaFinanceiros
         }
 
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<SistemaFinanceiroResponse>> Listar(int pagina, int quantidade, [FromQuery] SistemaFinanceiroListarRequest sistemaFinanceiroListarRequest)
-        {    var response = sistemaFinanceirosAppServico.Listar(pagina, quantidade, sistemaFinanceiroListarRequest);
+        public ActionResult<PaginacaoConsulta<SistemaFinanceiroResponse>> Listar([FromQuery] SistemaFinanceiroListarRequest sistemaFinanceiroListarRequest)
+        {    var response = sistemaFinanceirosAppServico.Listar(sistemaFinanceiroListarRequest);
             return Ok(response);
         }
 

@@ -88,32 +88,26 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             }
         }
 
-        public PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest)
+        public PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request)
         {
-            if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
             IQueryable<Despesa> query = despesasRepositorio.Query();
-            query = query.Where(d => d.Usuario.Email == despesaListarRequest.emailUsuario);
-            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, pagina, quantidade);
+            query = query.Where(d => d.Usuario.Email == request.emailUsuario);
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<DespesaResponse> response;
             response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
             return response;
         }
 
-        public PaginacaoConsulta<DespesaResponse> ListarDespesas(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest)
+        public PaginacaoConsulta<DespesaResponse> ListarDespesas(int? pagina, int quantidade, DespesaListarRequest request)
         {
-            if (pagina == null || pagina.Value <= 0) 
-                throw new Exception("Pagina não especificada");
-
-            if (quantidade <= 0)
-                throw new Exception("Quantidade inválida");
 
             IQueryable<Despesa> query = despesasRepositorio.Query()
-                .Where(d => d.Usuario.Email == despesaListarRequest.emailUsuario && 
+                .Where(d => d.Usuario.Email == request.emailUsuario && 
                             d.Pago == false &&
                             d.DataVencimento.Year == DateTime.Now.Year &&
                             d.DataVencimento.Month == DateTime.Now.AddMonths(-1).Month);
 
-            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, pagina, quantidade);
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<DespesaResponse> response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
 
             return response;

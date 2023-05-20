@@ -63,8 +63,8 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         }
 
         [HttpGet()]
-        public ActionResult<PaginacaoConsulta<DespesaResponse>> ListarDespesas(int pagina, int quantidade,[FromQuery] DespesaListarRequest despesaListarRequest)
-        {    var response = despesasAppServico.Listar(pagina, quantidade, despesaListarRequest);
+        public ActionResult<PaginacaoConsulta<DespesaResponse>> ListarDespesas([FromQuery] DespesaListarRequest despesaListarRequest)
+        {    var response = despesasAppServico.Listar(despesaListarRequest);
             return Ok(response);
         }
 

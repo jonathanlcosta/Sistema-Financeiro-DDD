@@ -10,7 +10,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos.Interfaces
 {
     public interface ISistemaFinanceirosAppServico
     {
-        PaginacaoConsulta<SistemaFinanceiroResponse> Listar(int? pagina, int quantidade, SistemaFinanceiroListarRequest sistemaFinanceiroListarRequest);
+        PaginacaoConsulta<SistemaFinanceiroResponse> Listar(SistemaFinanceiroListarRequest request);
         SistemaFinanceiroResponse Recuperar(int id);
         SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest sistemaFinanceiroInserirRequest);
         SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest);

@@ -76,15 +76,12 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             }
         }
 
-        public PaginacaoConsulta<SistemaFinanceiroResponse> Listar(int? pagina, int quantidade, SistemaFinanceiroListarRequest sistemaFinanceiroListarRequest)
+        public PaginacaoConsulta<SistemaFinanceiroResponse> Listar(SistemaFinanceiroListarRequest request)
         {
-            if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
             IQueryable<SistemaFinanceiro> query = sistemaFinanceirosRepositorio.Query();
-            if(sistemaFinanceiroListarRequest is null)
-            throw new Exception();
-            if (!string.IsNullOrEmpty(sistemaFinanceiroListarRequest.Nome))
-                query = query.Where(p => p.Nome.Contains(sistemaFinanceiroListarRequest.Nome));
-            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, pagina, quantidade);
+            if (!string.IsNullOrEmpty(request.Nome))
+                query = query.Where(p => p.Nome.Contains(request.Nome));
+            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<SistemaFinanceiroResponse> response;
             response = mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
             return response;

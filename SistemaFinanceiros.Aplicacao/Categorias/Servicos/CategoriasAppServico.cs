@@ -87,12 +87,12 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             }
         }
 
-        public PaginacaoConsulta<CategoriaResponse> Listar(int? pagina, int quantidade, CategoriaListarRequest request)
+        public PaginacaoConsulta<CategoriaResponse> Listar(CategoriaListarRequest request)
         {
             CategoriaListarFiltro filtro = mapper.Map<CategoriaListarFiltro>(request);
             IQueryable<Categoria> query = categoriasRepositorio.Filtrar(filtro);
 
-            PaginacaoConsulta<Categoria> categorias = categoriasRepositorio.Listar(query, pagina, quantidade);
+            PaginacaoConsulta<Categoria> categorias = categoriasRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<CategoriaResponse> response;
             response = mapper.Map<PaginacaoConsulta<CategoriaResponse>>(categorias);
             return response;

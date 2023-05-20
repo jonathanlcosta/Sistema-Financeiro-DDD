@@ -66,27 +66,27 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             }
         }
 
-        public PaginacaoConsulta<UsuarioResponse> Listar(int? pagina, int quantidade, UsuarioListarRequest usuarioListarRequest)
+        public PaginacaoConsulta<UsuarioResponse> Listar(int? pagina, int quantidade, UsuarioListarRequest request)
         {
             if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
 
             IQueryable<Usuario> query = usuariosRepositorio.Query();
-            if (usuarioListarRequest is null)
+            if (request is null)
                 throw new Exception();
 
-            if (!string.IsNullOrEmpty(usuarioListarRequest.Nome))
-                query = query.Where(p => p.Nome.Contains(usuarioListarRequest.Nome));
-            if (!string.IsNullOrEmpty(usuarioListarRequest.CPF))
-                query = query.Where(p => p.CPF.Contains(usuarioListarRequest.CPF));
-            if (!string.IsNullOrEmpty(usuarioListarRequest.Email))
-                query = query.Where(p => p.Email.Contains(usuarioListarRequest.Email));
+            if (!string.IsNullOrEmpty(request.Nome))
+                query = query.Where(p => p.Nome.Contains(request.Nome));
+            if (!string.IsNullOrEmpty(request.CPF))
+                query = query.Where(p => p.CPF.Contains(request.CPF));
+            if (!string.IsNullOrEmpty(request.Email))
+                query = query.Where(p => p.Email.Contains(request.Email));
 
-                if (usuarioListarRequest.idSistemaFinanceiro != 0)
+                if (request.idSistemaFinanceiro != 0)
             {
-                query = query.Where(x => x.SistemaFinanceiro!.Id == usuarioListarRequest.idSistemaFinanceiro);
+                query = query.Where(x => x.SistemaFinanceiro!.Id == request.idSistemaFinanceiro);
             }
 
-            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, pagina, quantidade);
+            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<UsuarioResponse> response;
             response = mapper.Map<PaginacaoConsulta<UsuarioResponse>>(usuarios);
             return response;

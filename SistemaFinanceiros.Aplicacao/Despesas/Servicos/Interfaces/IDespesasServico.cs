@@ -18,7 +18,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario);
         object CarregaGraficos(string email);
         IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
-        PaginacaoConsulta<DespesaResponse> Listar(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest);
+       PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request);
         PaginacaoConsulta<DespesaResponse> ListarDespesas(int? pagina, int quantidade, DespesaListarRequest despesaListarRequest);
 
     }

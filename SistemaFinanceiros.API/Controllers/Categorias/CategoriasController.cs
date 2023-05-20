@@ -33,8 +33,8 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
         }
 
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<CategoriaResponse>> Listar(int pagina, int quantidade, [FromQuery] CategoriaListarRequest categoriaListarRequest)
-        {    var response = categoriasAppServico.Listar(pagina, quantidade, categoriaListarRequest);
+        public ActionResult<PaginacaoConsulta<CategoriaResponse>> Listar([FromQuery] CategoriaListarRequest categoriaListarRequest)
+        {    var response = categoriasAppServico.Listar(categoriaListarRequest);
             return Ok(response);
         }
 
