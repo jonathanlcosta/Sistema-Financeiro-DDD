@@ -27,7 +27,7 @@ namespace SistemaFinanceiros.Dominio.Categorias.Entidades
 
         public virtual void SetNome(string nome)
         {
-            if (String.IsNullOrEmpty(nome))
+            if (String.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("O nome não pode ser vazio");
             if (nome.Length > 100)
                 throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
