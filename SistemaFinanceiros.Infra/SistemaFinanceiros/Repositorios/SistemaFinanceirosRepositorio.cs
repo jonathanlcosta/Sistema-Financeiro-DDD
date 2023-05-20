@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NHibernate;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios;
+using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios.Filtros;
 using SistemaFinanceiros.Infra.Genericos;
 
 namespace SistemaFinanceiros.Infra.SistemaFinanceiros
@@ -14,6 +15,18 @@ namespace SistemaFinanceiros.Infra.SistemaFinanceiros
        public SistemaFinanceirosRepositorio(ISession session) : base (session)
        {
         
-       } 
+       }
+
+        public IQueryable<SistemaFinanceiro> Filtrar(SistemaFinanceiroListarFiltro filtro)
+        {
+            IQueryable<SistemaFinanceiro> query = Query();
+
+            if (!string.IsNullOrWhiteSpace(filtro.Nome))
+            {
+                 query = query.Where(d => d.Nome.Contains(filtro.Nome));
+            }
+
+            return query;
+        }
     }
 }

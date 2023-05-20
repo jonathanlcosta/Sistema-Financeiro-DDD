@@ -5,6 +5,7 @@ using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Request;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Response;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios;
+using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
@@ -78,9 +79,8 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
 
         public PaginacaoConsulta<SistemaFinanceiroResponse> Listar(SistemaFinanceiroListarRequest request)
         {
-            IQueryable<SistemaFinanceiro> query = sistemaFinanceirosRepositorio.Query();
-            if (!string.IsNullOrEmpty(request.Nome))
-                query = query.Where(p => p.Nome.Contains(request.Nome));
+           SistemaFinanceiroListarFiltro filtro = mapper.Map<SistemaFinanceiroListarFiltro>(request);
+            IQueryable<SistemaFinanceiro> query = sistemaFinanceirosRepositorio.Filtrar(filtro);
             PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<SistemaFinanceiroResponse> response;
             response = mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
