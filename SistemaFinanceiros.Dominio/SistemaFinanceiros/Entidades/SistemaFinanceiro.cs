@@ -12,7 +12,6 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
         public virtual string Nome { get; protected set; }
         public virtual int Mes { get; protected set; }
         public virtual int Ano { get; protected set; }
-        public virtual Usuario Usuario { get; set; }
         public virtual int DiaFechamento { get; protected set; }
         public virtual bool GerarCopiaDespesa { get; protected set; }
         public virtual int MesCopia { get; protected set; }
@@ -21,12 +20,12 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
         public SistemaFinanceiro(string nome)
         {
             SetNome(nome);
-            SetAno();
-            SetDiaFechamento();
-            SetGerarCopiaDespesa();
-            SetMes();
-            SetMesCopia();
-            SetAnoCopia();
+            Ano = DateTime.Now.Year;
+            DiaFechamento = 1;
+            GerarCopiaDespesa = true;
+            Mes = DateTime.Now.Month;
+            MesCopia = DateTime.Now.Month;
+            AnoCopia = DateTime.Now.Year;
         }
 
         public SistemaFinanceiro()
@@ -41,46 +40,6 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
                 throw new ArgumentException("O nome é obrigatorio");
             }
             Nome = nome;
-        }
-
-        public virtual void SetAno()
-        {
-            var data = DateTime.Now;
-            var ano = data.Year;
-            this.Ano = ano;
-        }
-
-        public virtual void SetDiaFechamento()
-        {
-            var diafechamento = 1;
-            DiaFechamento = diafechamento;
-        }
-
-        public virtual void SetMes()
-        {
-            var data = DateTime.Now;
-            var mes = data.Month;
-            Mes = mes;
-        }
-
-        public virtual void SetAnoCopia()
-        {
-            var data = DateTime.Now;
-            var anoCopia = data.Year;
-            AnoCopia = anoCopia;
-        }
-
-        public virtual void SetMesCopia()
-        {
-            var data = DateTime.Now;
-            var mesCopia = data.Month;
-            MesCopia = mesCopia;
-        }
-
-        public virtual void SetGerarCopiaDespesa()
-        {
-            var gerarCopiaDespesa = true;
-            GerarCopiaDespesa = gerarCopiaDespesa;
         }
     }
 }
