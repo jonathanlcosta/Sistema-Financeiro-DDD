@@ -7,7 +7,7 @@ namespace SistemaFinanceiros.Dominio.Categorias.Repositorios.Filtros
 {
     public class CategoriaListarFiltro
     {
-        public string? Nome { get; set; }
-        public string? NomeSistema{ get; set; }
+        public string Nome { get; set; }
+        public string NomeSistema{ get; set; }
     }
 }

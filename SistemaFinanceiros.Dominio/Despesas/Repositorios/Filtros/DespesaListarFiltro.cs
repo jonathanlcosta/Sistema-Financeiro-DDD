@@ -7,7 +7,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios.Filtros
 {
     public class DespesaListarFiltro
     {
-    public string? Nome { get; set; }
-    public string? emailUsuario { get; set; }
+    public string Nome { get; set; }
+    public string emailUsuario { get; set; }
     }
 }

@@ -68,11 +68,9 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
 
         public PaginacaoConsulta<UsuarioResponse> Listar(int? pagina, int quantidade, UsuarioListarRequest request)
         {
-            if (pagina.Value <= 0) throw new Exception("Pagina não especificada");
+          
 
             IQueryable<Usuario> query = usuariosRepositorio.Query();
-            if (request is null)
-                throw new Exception();
 
             if (!string.IsNullOrEmpty(request.Nome))
                 query = query.Where(p => p.Nome.Contains(request.Nome));

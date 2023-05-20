@@ -81,7 +81,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
         {
            SistemaFinanceiroListarFiltro filtro = mapper.Map<SistemaFinanceiroListarFiltro>(request);
             IQueryable<SistemaFinanceiro> query = sistemaFinanceirosRepositorio.Filtrar(filtro);
-            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Pg, request.Qt, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<SistemaFinanceiroResponse> response;
             response = mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
             return response;
