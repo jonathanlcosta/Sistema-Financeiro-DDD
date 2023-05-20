@@ -31,11 +31,11 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
         {
             SetNome(nome);
             SetValor(valor);
-            SetMes();
-            SetAno();
+            Mes = DateTime.UtcNow.Month;
+            Ano = DateTime.UtcNow.Year;
             SetTipoDespesa(tipoDespesa);
-            SetDataCadastro();
-            SetDataAlteracao();
+            DataCadastro = DateTime.UtcNow;
+            DataAlteracao = DateTime.UtcNow;
             SetDataVencimento(dataVencimento);
             SetPago(pago);
             SetDespesaAtrasada(despesaAtrasada);
@@ -68,35 +68,9 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
             Valor = valor;
         }
 
-        public virtual void SetMes()
-        {
-             var data = DateTime.UtcNow;
-             var mes = data.Month;
-            Mes = mes;
-        }
-
-        public virtual void SetAno()
-        {   
-            var data = DateTime.UtcNow;
-            var ano = data.Year;
-            Ano = ano;
-        }
-
         public virtual void SetTipoDespesa(EnumTipoDespesa tipoDespesa)
         {
             TipoDespesa = tipoDespesa;
-        }
-
-         public virtual void SetDataCadastro()
-        {
-            var data = DateTime.UtcNow;
-            DataCadastro = data;
-        }
-
-        public virtual void SetDataAlteracao()
-        {
-             var data = DateTime.UtcNow;
-            DataAlteracao = data;
         }
 
         public virtual void SetDataVencimento(DateTime data)
