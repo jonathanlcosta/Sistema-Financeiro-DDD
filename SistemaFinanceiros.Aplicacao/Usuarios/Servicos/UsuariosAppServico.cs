@@ -12,6 +12,7 @@ using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Repositorios;
 using SistemaFinanceiros.Dominio.Usuarios.Repositorios.Filtros;
+using SistemaFinanceiros.Dominio.Usuarios.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.util;
 
@@ -34,13 +35,13 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             this.mapper = mapper;
            this.unitOfWork = unitOfWork;
         }
-        public UsuarioResponse Editar(int id, UsuarioEditarRequest usuarioEditarRequest)
+        public UsuarioResponse Editar(int id, UsuarioEditarRequest request)
         {
+            UsuarioEditarComando comando = mapper.Map<UsuarioEditarComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var usuario = usuariosServico.Editar(id, usuarioEditarRequest.CPF, usuarioEditarRequest.Nome, usuarioEditarRequest.Email, 
-           usuarioEditarRequest.Administrador, usuarioEditarRequest.SistemaAtual, usuarioEditarRequest.idSistemaFinanceiro);
+                Usuario usuario = usuariosServico.Editar(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<UsuarioResponse>(usuario);;
             }

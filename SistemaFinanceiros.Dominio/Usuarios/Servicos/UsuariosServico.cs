@@ -6,6 +6,7 @@ using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Repositorios;
+using SistemaFinanceiros.Dominio.Usuarios.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 
 namespace SistemaFinanceiros.Dominio.Usuarios.Servicos
@@ -19,31 +20,18 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Servicos
             this.usuariosRepositorio = usuariosRepositorio;
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
         }
-        public Usuario Editar(int id, string cpf, string nome, string email, bool administrador, bool sistemaAtual, int idSistemaFinanceiro)
+        public Usuario Editar(int id, UsuarioEditarComando comando)
         {
-           var sistemaFinanceiro = sistemaFinanceirosServico.Validar(idSistemaFinanceiro);
-           var usuario = Validar(id);
-           usuario.SetCpf(cpf);
-           usuario.SetEmail(email);
-           usuario.SetAdministrador(administrador);
-           usuario.SetSistemaAtual(sistemaAtual);
+           SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.idSistemaFinanceiro);
+           Usuario usuario = Validar(id);
+           usuario.SetCpf(comando.CPF);
+           usuario.SetEmail(comando.Email);
+           usuario.SetAdministrador(comando.Administrador);
+           usuario.SetSistemaAtual(comando.SistemaAtual);
            usuario.SetSistemaFinanceiro(sistemaFinanceiro);
-           usuario.SetNome(nome);
+           usuario.SetNome(comando.Nome);
            usuario = usuariosRepositorio.Editar(usuario);
            return usuario;
-        }
-
-        public Usuario Inserir(Usuario usuario)
-        {
-            var response = usuariosRepositorio.Inserir(usuario);
-            return response;
-        }
-
-        public Usuario Instanciar(string cpf, string nome, string email, string senha, bool administrador, bool sistemaAtual, int idSistemaFinanceiro)
-        {
-            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(idSistemaFinanceiro);
-            var usuario = new Usuario(cpf, nome , email, senha, administrador, sistemaAtual, sistemaFinanceiro);
-            return usuario;
         }
 
         public Usuario Validar(int id)

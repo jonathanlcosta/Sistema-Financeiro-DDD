@@ -8,6 +8,7 @@ using SistemaFinanceiros.DataTransfer.Usuarios.Request;
 using SistemaFinanceiros.DataTransfer.Usuarios.Response;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Repositorios.Filtros;
+using SistemaFinanceiros.Dominio.Usuarios.Servicos.Comandos;
 
 namespace SistemaFinanceiros.Aplicacao.Usuarios.Profiles
 {
@@ -19,6 +20,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Profiles
         CreateMap<Usuario, UsuarioResponse>()
         .ForMember(x => x.idSistemaFinanceiro, m => m.MapFrom(y => y.SistemaFinanceiro!.Id));
         CreateMap<UsuarioListarRequest, UsuarioListarFiltro>();
+        CreateMap<UsuarioEditarRequest, UsuarioEditarComando>();
         }
     }
 }
