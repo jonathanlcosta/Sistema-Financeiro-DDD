@@ -20,5 +20,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces
         HttpResponseMessage ExportarCategoriasExcel();
         Stream ListarExcel();
 
+        IList<CategoriaNomeResponse> ListarNomesCategoria();
+
     }
 }

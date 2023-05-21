@@ -34,5 +34,14 @@ namespace SistemaFinanceiros.Infra.Categorias
 
             return query;
         }
+
+        public IList<Categoria> ListarNomesCategoria()
+        {
+            IList<Categoria> categorias = Query()
+            .Select(c => new Categoria(c.Nome))
+            .ToList();
+
+            return categorias;
+        }
     }
 }

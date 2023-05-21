@@ -20,6 +20,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Profiles
         CreateMap<CategoriaInserirRequest, CategoriaComando>();
         CreateMap<CategoriaEditarRequest, CategoriaComando>();
         CreateMap<CategoriaListarRequest, CategoriaListarFiltro>();
+        CreateMap<Categoria, CategoriaNomeResponse>();
 
         }
     }

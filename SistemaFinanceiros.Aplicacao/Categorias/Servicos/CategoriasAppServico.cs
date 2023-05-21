@@ -233,6 +233,12 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
                 throw;
             }
         }
-    
+
+        public IList<CategoriaNomeResponse> ListarNomesCategoria()
+        {
+             IList<Categoria> categorias = categoriasRepositorio.ListarNomesCategoria();
+            var response = mapper.Map<IList<CategoriaNomeResponse>>(categorias);
+            return response;
+        }
     }
     }

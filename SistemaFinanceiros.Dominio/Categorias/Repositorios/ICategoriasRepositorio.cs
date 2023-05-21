@@ -11,5 +11,6 @@ namespace SistemaFinanceiros.Dominio.Categorias.Repositorios
     public interface ICategoriasRepositorio : IGenericoRepositorio<Categoria>
     {
          IQueryable<Categoria> Filtrar(CategoriaListarFiltro filtro);
+         IList<Categoria> ListarNomesCategoria();
     }
 }

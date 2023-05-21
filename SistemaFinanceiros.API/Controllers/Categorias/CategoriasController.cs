@@ -38,6 +38,13 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok(response);
         }
 
+        [HttpGet("ListarNomesCategorias")]
+        public ActionResult<IList<CategoriaNomeResponse>> ListarNomesCategoria()
+        {
+            var response = categoriasAppServico.ListarNomesCategoria();
+            return Ok(response);
+        }
+
         [HttpPost]
         public ActionResult<CategoriaResponse> Inserir([FromBody] CategoriaInserirRequest request)
         {
