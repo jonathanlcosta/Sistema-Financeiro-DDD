@@ -28,12 +28,11 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
         }
         public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest request)
         {
-           var comando = mapper.Map<SistemaFinanceiroComando>(request);
+           SistemaFinanceiroComando comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, comando
-            );
+                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);;
             }
@@ -49,7 +48,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             try
             {
                 unitOfWork.BeginTransaction();
-                var sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
+                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
                 sistemaFinanceirosRepositorio.Excluir(sistemaFinanceiro);
                 unitOfWork.Commit();
             }
@@ -62,7 +61,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
 
         public SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest request)
         {
-            var comando = mapper.Map<SistemaFinanceiroComando>(request);
+            SistemaFinanceiroComando comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
@@ -89,7 +88,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
 
         public SistemaFinanceiroResponse Recuperar(int id)
         {
-            var sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
+            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
             var response = mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
             return response;
         }

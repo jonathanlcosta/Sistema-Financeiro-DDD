@@ -56,7 +56,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             try
             {
                 unitOfWork.BeginTransaction();
-                var usuario = usuariosServico.Validar(id);
+                Usuario usuario = usuariosServico.Validar(id);
                 usuariosRepositorio.Excluir(usuario);
                 unitOfWork.Commit();
             }
@@ -83,7 +83,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
 
         public UsuarioResponse Recuperar(int id)
         {
-           var usuario = usuariosServico.Validar(id);
+           Usuario usuario = usuariosServico.Validar(id);
             var response = mapper.Map<UsuarioResponse>(usuario);
             return response;
         }

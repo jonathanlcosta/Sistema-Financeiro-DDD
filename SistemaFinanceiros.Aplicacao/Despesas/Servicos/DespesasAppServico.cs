@@ -40,11 +40,11 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public DespesaResponse Editar(int id, DespesaEditarRequest request)
         {
-             var comando = mapper.Map<DespesaComando>(request);
+             DespesaComando comando = mapper.Map<DespesaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                var despesa = despesasServico.Editar(id, comando);
+                Despesa despesa = despesasServico.Editar(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<DespesaResponse>(despesa);;
             }
@@ -60,7 +60,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             try
             {
                 unitOfWork.BeginTransaction();
-                var despesa = despesasServico.Validar(id);
+                Despesa despesa = despesasServico.Validar(id);
                 despesasRepositorio.Excluir(despesa);
                 unitOfWork.Commit();
             }
@@ -73,7 +73,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public DespesaResponse Inserir(DespesaInserirRequest request)
         {
-            var comando = mapper.Map<DespesaComando>(request);
+            DespesaComando comando = mapper.Map<DespesaComando>(request);
              
             try
             {
@@ -102,7 +102,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         public PaginacaoConsulta<DespesaResponse> ListarDespesas(DespesaListarRequest request)
         {
 
-           DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
+            DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
             IQueryable<Despesa> query = despesasRepositorio.FiltrarDespesasAtrasadas(filtro);
 
             PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
@@ -115,7 +115,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         public IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario)
         {
 
-            var despesas = despesasRepositorio.ListarDespesasUsuario(emailUsuario);
+            IList<Despesa> despesas = despesasRepositorio.ListarDespesasUsuario(emailUsuario);
             var response = mapper.Map<IList<DespesaResponse>>(despesas);
             return response;
         }
@@ -131,14 +131,14 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
         public IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email)
         {
-            var despesas = despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(email);
+            IList<Despesa> despesas = despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(email);
             var response = mapper.Map<IList<DespesaResponse>>(despesas);
             return response;
         }
 
         public DespesaResponse Recuperar(int id)
         {
-            var despesa = despesasServico.Validar(id);
+            Despesa despesa = despesasServico.Validar(id);
             var response = mapper.Map<DespesaResponse>(despesa);
             return response;
         }

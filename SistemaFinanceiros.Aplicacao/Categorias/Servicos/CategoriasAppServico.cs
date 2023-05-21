@@ -39,7 +39,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
         }
         public CategoriaResponse Editar(int id, CategoriaEditarRequest request)
         {
-            var comando = mapper.Map<CategoriaComando>(request);
+            CategoriaComando comando = mapper.Map<CategoriaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
@@ -59,7 +59,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
             try
             {
                 unitOfWork.BeginTransaction();
-                var categoria = categoriasServico.Validar(id);
+                Categoria categoria = categoriasServico.Validar(id);
                 categoriasRepositorio.Excluir(categoria);
                 unitOfWork.Commit();
             }
@@ -72,7 +72,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
 
         public CategoriaResponse Inserir(CategoriaInserirRequest request)
         {
-            var comando = mapper.Map<CategoriaComando>(request);
+            CategoriaComando comando = mapper.Map<CategoriaComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
@@ -100,7 +100,7 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos
 
         public CategoriaResponse Recuperar(int id)
         {
-            var categoria = categoriasServico.Validar(id);
+            Categoria categoria = categoriasServico.Validar(id);
             var response = mapper.Map<CategoriaResponse>(categoria);
             return response;
         }
