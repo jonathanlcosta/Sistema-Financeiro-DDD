@@ -12,5 +12,6 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces
         Categoria Validar(int id);
         Categoria Inserir(CategoriaComando comando);
         Categoria Editar(int id, CategoriaComando comando);
+        Categoria Instanciar(CategoriaComando comando);
     }
 }

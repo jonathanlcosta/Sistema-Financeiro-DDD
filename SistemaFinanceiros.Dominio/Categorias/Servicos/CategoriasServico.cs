@@ -32,10 +32,16 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
 
         public Categoria Inserir(CategoriaComando comando)
         {
-        SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
-        Categoria categoria = new Categoria(comando.Nome, sistemaFinanceiro);
+        Categoria categoria = Instanciar(comando);
         var response = categoriasRepositorio.Inserir(categoria);
            return response;
+        }
+
+         public Categoria Instanciar(CategoriaComando comando)
+        {
+            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
+            Categoria categoria = new(comando.Nome, sistemaFinanceiro);
+            return categoria;
         }
 
         public Categoria Validar(int id)

@@ -14,6 +14,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces
         Despesa Inserir(DespesaComando comando);
         Despesa Editar(int id, DespesaComando comando);
         object CarregaGraficos(string emailUsuario);
+        Despesa Instanciar(DespesaComando comando);
         
     }
 }

@@ -73,12 +73,19 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
 
         public Despesa Inserir(DespesaComando comando)
         {
-            Categoria categoria = categoriasServico.Validar(comando.IdCategoria);
-            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
-            Despesa despesa = new Despesa(comando.Nome, comando.Valor, comando.TipoDespesa, comando.DataVencimento, comando.Pago, comando.DespesaAtrasada,
-            categoria, usuario);
+           Despesa despesa = Instanciar(comando);
             var response = despesasRepositorio.Inserir(despesa);
             return response;
+        }
+
+        public Despesa Instanciar(DespesaComando comando)
+        {
+            Categoria categoria = categoriasServico.Validar(comando.IdCategoria);
+            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
+            Despesa despesa = new(comando.Nome, comando.Valor, comando.TipoDespesa, comando.DataVencimento, comando.Pago, comando.DespesaAtrasada,
+            categoria, usuario);
+
+            return despesa;
         }
 
         public Despesa Validar(int id)
