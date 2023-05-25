@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace AulaAPIVitor.Dominio.Execoes
+namespace SistemaFinanceiros.Dominio.Execoes
 {
     public class AtributoInvalidoExcecao : RegraDeNegocioExcecao
     {

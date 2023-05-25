@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 
 namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
@@ -44,9 +44,9 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         public virtual void SetCpf(string cpf)
         {
             if (String.IsNullOrEmpty(cpf))
-                throw new ArgumentException("O CPF não pode ser vazio.");
+                throw new AtributoObrigatorioExcecao("CPF");
             if (cpf.Length != 11)
-                throw new ArgumentException("O CPF deve conter 11 caracteres.");
+                throw new TamanhoDeAtributoInvalidoExcecao("CPF", 11, 11);
             CPF = cpf.Replace(".", "").Replace("/", "").Replace("-", "");
         }
 
@@ -56,7 +56,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
             Regex regex = new Regex(pattern);
             if (!regex.IsMatch(email))
             {
-                throw new ArgumentException("Email com formato invalido");
+                throw new AtributoInvalidoExcecao("Email");
             }
             Email = email;
         }
@@ -64,9 +64,9 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         public virtual void SetNome(string nome)
         {
             if (String.IsNullOrEmpty(nome))
-                throw new ArgumentException("O nome não pode ser vazio");
+                throw new AtributoObrigatorioExcecao("Nome");
             if (nome.Length > 100)
-                throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
+                throw new TamanhoDeAtributoInvalidoExcecao("Nome");
             Nome = nome;
         }
 
@@ -74,29 +74,29 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
         {
             if (string.IsNullOrEmpty(senha) || string.IsNullOrWhiteSpace(senha))
               {
-                  throw new ArgumentException("Senha nula ou com apenas espaços em branco");
+                  throw new AtributoObrigatorioExcecao("Senha");
               }
               if (senha.Length < 6 || senha.Length > 20)
               {
-                  throw new ArgumentException("Senha com menos de 6 ou mais de 20 caracteres");
+                  throw new TamanhoDeAtributoInvalidoExcecao("Senha", 6, 20);
               }
               // Verifica se a senha possui pelo menos uma letra maiúscula, uma letra minúscula,
               if (!senha.Any(c => char.IsUpper(c)))
               {
-                  throw new ArgumentException("Senha precisa ter pelo menos um caractere maiúsculo");
+                  throw new AtributoInvalidoExcecao("Senha");
               }
               if (!senha.Any(c => char.IsLower(c)))
               {
-                  throw new ArgumentException("Senha precisa ter pelo menos um caractere minúsculo");
+                  throw new AtributoInvalidoExcecao("Senha");
               }
               // um caractere especial e um número
               if (!senha.Any(c => char.IsSymbol(c) || char.IsPunctuation(c)))
               {
-                  throw new ArgumentException("Senha precisa ter pelo menos um caractere especial");
+                  throw new AtributoInvalidoExcecao("Senha");
               }
               if (!senha.Any(c => char.IsNumber(c)))
               {
-                  throw new ArgumentException("Senha precisa ter pelo menos um caractere numérico");
+                  throw new AtributoInvalidoExcecao("Senha");
               }
             Senha = senha;
         }
@@ -117,11 +117,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
 
         public virtual void SetSistemaFinanceiro(SistemaFinanceiro sistema)
         {
-            if (sistema is null)
-            {
-                throw new ArgumentException("O usuario precisa ter um Sistema");
-            }
-            SistemaFinanceiro = sistema;
+            SistemaFinanceiro = sistema ?? throw new AtributoObrigatorioExcecao("Sistema");
         }
     }
 }

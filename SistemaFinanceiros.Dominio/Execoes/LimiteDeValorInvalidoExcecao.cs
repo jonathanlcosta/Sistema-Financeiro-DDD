@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.Text;
 
-namespace AulaAPIVitor.Dominio.Execoes
+namespace SistemaFinanceiros.Dominio.Execoes
 {
     public class LimiteDeValorInvalidoExcecao : RegraDeNegocioExcecao
     {

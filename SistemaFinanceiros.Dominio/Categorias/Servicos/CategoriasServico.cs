@@ -6,6 +6,7 @@ using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Repositorios;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 
@@ -48,7 +49,7 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
         {
             var categoriaResponse = categoriasRepositorio.Recuperar(id);
             if(categoriaResponse is null){
-                throw new ArgumentException("Categoria não encontrada");
+                throw new RegraDeNegocioExcecao("Categoria não encontrada");
             }
            return categoriaResponse;
 

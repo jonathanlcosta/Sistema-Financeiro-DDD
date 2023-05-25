@@ -9,6 +9,7 @@ using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 
@@ -93,7 +94,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
             var despesaResponse = this.despesasRepositorio.Recuperar(id);
             if(despesaResponse is null)
             {
-                 throw new ArgumentException("Despesa não encontrada");
+                 throw new RegraDeNegocioExcecao("Despesa não encontrada");
             }
             return despesaResponse;
         }

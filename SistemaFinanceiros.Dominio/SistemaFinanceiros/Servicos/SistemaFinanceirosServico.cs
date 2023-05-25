@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Comandos;
@@ -42,7 +43,7 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos
             var sistemaFinanceiroResponse = this.sistemaFinanceirosRepositorio.Recuperar(id);
             if(sistemaFinanceiroResponse is null)
             {
-                 throw new ArgumentException("Sistema Financeiro não encontrado");
+                 throw new RegraDeNegocioExcecao("Sistema Financeiro não encontrado");
             }
             return sistemaFinanceiroResponse;
         }

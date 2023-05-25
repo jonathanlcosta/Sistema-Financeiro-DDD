@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Enumeradores;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 
 namespace SistemaFinanceiros.Dominio.Despesas.Entidades
@@ -47,24 +48,22 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
        public virtual void SetNome(string nome)
         {
-            if (String.IsNullOrEmpty(nome))
-                throw new ArgumentException("O nome não pode ser vazio");
+            if (string.IsNullOrEmpty(nome))
+                throw new AtributoObrigatorioExcecao("Nome");
             if (nome.Length > 100)
-                throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
+                throw new TamanhoDeAtributoInvalidoExcecao("Nome");
             Nome = nome;
         }
 
         public virtual void SetUsuario(Usuario usuario)
         {
-            if(usuario is null)
-            throw new ArgumentException("O usuario é obrigatório");
-            Usuario = usuario;
+           Usuario = usuario ?? throw new AtributoObrigatorioExcecao("Usuario");
         }
 
         public virtual void SetValor(decimal valor)
         {
             if(valor <= 0)
-            throw new ArgumentException("O valor não pode ser igual ou menor que zero");
+            throw new AtributoObrigatorioExcecao("Valor");
             Valor = valor;
         }
 
@@ -77,7 +76,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
         {
             if (data == DateTime.MinValue)
             {
-                throw new ArgumentException("A data não foi informada.");
+                throw new AtributoObrigatorioExcecao("Data");
             }
             DataVencimento = data;
         }
@@ -98,9 +97,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
         public virtual void SetCategoria(Categoria categoria)
         {
-            if(categoria is null)
-            throw new ArgumentException("A categoria precisa ser informada");
-            Categoria = categoria;
+             Categoria = categoria ?? throw new AtributoObrigatorioExcecao("Categoria");
         }
     }
 }

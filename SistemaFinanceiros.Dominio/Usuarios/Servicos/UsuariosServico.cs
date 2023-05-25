@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
@@ -39,7 +40,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Servicos
            var usuarioResponse = this.usuariosRepositorio.Recuperar(id);
             if(usuarioResponse is null)
             {
-                 throw new Exception("Usuario não encontrado");
+                 throw new RegraDeNegocioExcecao("Usuario não encontrado");
             }
             return usuarioResponse;
         }

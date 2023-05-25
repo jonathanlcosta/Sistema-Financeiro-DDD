@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 
 namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
@@ -37,7 +38,7 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades
         {
             if (string.IsNullOrWhiteSpace(nome))
             {
-                throw new ArgumentException("O nome é obrigatorio");
+                throw new AtributoObrigatorioExcecao("Nome");
             }
             Nome = nome;
         }

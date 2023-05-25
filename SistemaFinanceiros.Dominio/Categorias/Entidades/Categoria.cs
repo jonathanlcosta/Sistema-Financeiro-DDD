@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 
 namespace SistemaFinanceiros.Dominio.Categorias.Entidades
@@ -27,18 +28,16 @@ namespace SistemaFinanceiros.Dominio.Categorias.Entidades
 
         public virtual void SetNome(string nome)
         {
-            if (String.IsNullOrWhiteSpace(nome))
-                throw new ArgumentException("O nome não pode ser vazio");
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new AtributoObrigatorioExcecao("Nome");
             if (nome.Length > 100)
-                throw new ArgumentException("O nome nao pode ter mais que 100 caracteres");
+                throw new TamanhoDeAtributoInvalidoExcecao("Nome");
             Nome = nome;
         }
 
         public virtual void SetSistema(SistemaFinanceiro sistema)
         {
-            if(sistema is null)
-            throw new ArgumentException("O sistema é necessário para a categoria");
-            SistemaFinanceiro = sistema;
+           SistemaFinanceiro = sistema ?? throw new AtributoObrigatorioExcecao("Sistema Financeiro");
         }
 
     }
