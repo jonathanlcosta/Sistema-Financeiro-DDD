@@ -22,6 +22,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request);
         PaginacaoConsulta<DespesaResponse> ListarDespesas(DespesaListarRequest request);
         IList<DespesasResumo> Consulta();
+        Stream ExportarExcel(DespesaListarRequest request);
 
     }
 }

@@ -68,18 +68,6 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok();
         }
 
-        [HttpGet]
-        [Route("ExportarExcel")]
-        public FileResult ExportarExcel()
-        {
-           var response = categoriasAppServico.ExportarCategoriasExcel();
-            var fileContent = response.Content.ReadAsByteArrayAsync().Result;
-            var contentType = response.Content.Headers.ContentType.MediaType;
-            var fileName = response.Content.Headers.ContentDisposition.FileName;
-
-            return File(fileContent, contentType, fileName);
-        }
-
         [HttpPost]
         [Route("excel")]
         public ActionResult UploadExcel(IFormFile file)
@@ -93,24 +81,6 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             {
                 return NotFound();
             }
-        }
-
-        [HttpGet]
-        [Route("excel")]
-        public ActionResult ListarExcel()
-        {
-            var planilha = categoriasAppServico.ListarExcel();
-
-            if (planilha != null)
-            {
-                FileStreamResult result = new FileStreamResult(planilha, "application/octet-stream")
-                {
-                    FileDownloadName = "Categorias.xlsx"
-                };
-                return result;
-            }
-            else
-                return NotFound();
         }
 
     }

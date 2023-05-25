@@ -17,9 +17,6 @@ namespace SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces
         CategoriaResponse Editar(int id, CategoriaEditarRequest categoriaEditarRequest);
         void Excluir(int id); 
         void UploadExcel(IFormFile file);
-        HttpResponseMessage ExportarCategoriasExcel();
-        Stream ListarExcel();
-
         IList<CategoriaNomeResponse> ListarNomesCategoria();
 
     }

@@ -1,5 +1,7 @@
 using AutoMapper;
 using NHibernate;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.Aplicacao.Transacoes.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
@@ -155,6 +157,54 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
                 NomeCategoria = x.Categoria.Nome,
                 NomeUsuario = x.Usuario.Nome
             }).ToList();
+        }
+
+        public Stream ExportarExcel(DespesaListarRequest request)
+        {
+            IWorkbook planilha = new XSSFWorkbook();
+            ISheet folha = planilha.CreateSheet("Despesas");
+            IRow cabecalho = folha.CreateRow(0);
+
+            cabecalho.CreateCell(0).SetCellValue("NomeDespesa");
+            cabecalho.CreateCell(1).SetCellValue("NomeCategoria");
+            cabecalho.CreateCell(2).SetCellValue("NomeSistema");
+            cabecalho.CreateCell(3).SetCellValue("NomeUsuario");
+
+            var filtro = mapper.Map<DespesaListarFiltro>(request);
+
+            IQueryable<Despesa> query = despesasRepositorio.Filtrar(filtro);
+
+            var queryProjecao = query.Select(x => new
+            {
+                NomeDespesa = x.Nome,
+                NomeSistema = x.Categoria.SistemaFinanceiro.Nome,
+                NomeCategoria = x.Categoria.Nome,
+                NomeUsuario = x.Usuario.Nome
+            });
+
+            int indiceDeLinha = 1;
+
+            foreach (var despesa in queryProjecao)
+            {
+                IRow linha = folha.CreateRow(indiceDeLinha);
+                linha.CreateCell(0).SetCellValue(despesa.NomeDespesa);
+                linha.CreateCell(1).SetCellValue(despesa.NomeSistema);
+                linha.CreateCell(2).SetCellValue(despesa.NomeCategoria);
+                linha.CreateCell(3).SetCellValue(despesa.NomeUsuario);
+                indiceDeLinha++;
+            }
+
+            for (int coluna = 0; coluna <= cabecalho.LastCellNum - 1; coluna++)
+            {
+                folha.AutoSizeColumn(coluna);
+            }
+
+            var memoryStream = new MemoryStream();
+            planilha.Write(memoryStream, false);
+            var bytes = memoryStream.ToArray();
+            File.WriteAllBytes($@"C:\\Users\nickc\Downloads_{DateTime.Now:ddMMyyyyHHmmss}.xlsx", bytes);
+
+            return new MemoryStream(bytes);
         }
     }
 }

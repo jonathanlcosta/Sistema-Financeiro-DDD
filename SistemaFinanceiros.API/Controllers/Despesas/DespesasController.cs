@@ -81,5 +81,17 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             var response = despesasAppServico.Consulta();
             return Ok(response);
         }
+
+         [HttpGet]
+        [Route("excel")]
+        public ActionResult Exportar([FromQuery] DespesaListarRequest request)
+        {
+            var planilha = despesasAppServico.ExportarExcel(request);
+            FileStreamResult result = new FileStreamResult(planilha, "application/octet-stream")
+            {
+                FileDownloadName = "Relatório de Despesas.xlsx"
+            };
+            return result;
+        }
     }
 }
