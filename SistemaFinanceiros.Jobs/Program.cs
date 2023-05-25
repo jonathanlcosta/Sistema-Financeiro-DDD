@@ -1,3 +1,4 @@
+using CrystalQuartz.AspNetCore;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
@@ -86,6 +87,8 @@ await scheduler.Start();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+app.UseCrystalQuartz(() => scheduler);
 
 app.UseAuthorization();
 
