@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using Xunit;
 
@@ -41,13 +42,13 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Entidades
             public void Quando_AtributoForNuloOuEspacoEmBranco_Espero_Excecao(string nome)
             {
                 
-                sut.Invoking(x => x.SetNome(nome)).Should().Throw<ArgumentException>();
+                sut.Invoking(x => x.SetNome(nome)).Should().Throw<AtributoObrigatorioExcecao>();
             }
 
             [Fact]
             public void Quando_NomeForMaiorQue100Caracteres_Espero_Excecao()
             {
-                sut.Invoking(x => x.SetNome(new string('*', 101))).Should().Throw<ArgumentException>();
+                sut.Invoking(x => x.SetNome(new string('*', 101))).Should().Throw<TamanhoDeAtributoInvalidoExcecao>();
             }
 
             [Fact]
@@ -64,7 +65,7 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Entidades
             [Fact]
             public void Quando_SistemaForNulo_Espero_Excecao()
             {
-                sut.Invoking(x => x.SetSistema(null)).Should().Throw<ArgumentException>();
+                sut.Invoking(x => x.SetSistema(null)).Should().Throw<AtributoObrigatorioExcecao>();
             }
 
             [Fact]
