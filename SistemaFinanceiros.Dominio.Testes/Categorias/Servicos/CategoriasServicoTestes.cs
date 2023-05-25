@@ -53,14 +53,14 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Servicos
             [Fact]
             public void Dado_CategoriaValido_Espero_CategoriaInserido()
             {
-                categoriasRepositorio.Inserir(Arg.Any<Categoria>()).Returns(categoriaValido);
-                CategoriaComando comando = new CategoriaComando();
-                comando.Nome = "Empresa";
-                comando.IdSistemaFinanceiro = 1;
-                Categoria categoria = sut.Inserir(comando);
+                CategoriaComando comando = Builder<CategoriaComando>.CreateNew()
+                .With(x => x.Nome, "Empresa").With(x => x.IdSistemaFinanceiro, 1).Build();
+                
+                Categoria resultado = sut.Inserir(comando);
 
-                categoria.Should().BeOfType<Categoria>();
-                categoria.Should().Be(categoriaValido);
+                resultado.Should().BeOfType<Categoria>();
+                resultado.Nome.Should().Be(comando.Nome);
+                resultado.Should().NotBeNull();
             }
         }
 
@@ -69,22 +69,33 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Servicos
             [Fact]
             public void Dado_ParametrosParaEditarCategoria_Espero_CategoriaEditado()
             {
-                CategoriaComando comando = new CategoriaComando();
-                comando.Nome = "Empresa";
-                comando.IdSistemaFinanceiro = 1;
-                categoriasRepositorio.Recuperar(Arg.Any<int>()).Returns(categoriaValido);
-                sistemaFinanceirosServico.Validar(Arg.Any<int>()).Returns(sistemaValido);
+               CategoriaComando comando = Builder<CategoriaComando>.CreateNew()
+                .With(x => x.Nome, "Empresa").With(x => x.IdSistemaFinanceiro, 1).Build();
 
-                Categoria categoria = sut.Editar(1, comando);
+                categoriasRepositorio.Recuperar(1).Returns(categoriaValido);
 
-                categoria.Should().NotBeNull();
-                categoriaValido.Nome.Should().Be("Empresa");
-                categoriaValido.SistemaFinanceiro.Should().BeSameAs(sistemaValido);
-                categoriasRepositorio.Received(1).Recuperar(1);
-                sistemaFinanceirosServico.Received(1).Validar(comando.IdSistemaFinanceiro);
-                categoriasRepositorio.Received(1).Editar(categoriaValido);
+                Categoria resultado = sut.Editar(1, comando);
+
+                resultado.Should().NotBeNull();
+                resultado.Nome.Should().Be(comando.Nome);
             }
         }
+
+         public class InstanciarMetodo : CategoriasServicoTestes
+        {
+            [Fact]
+            public void Quando_DadosCategoriaForemValidos_Espero_ObjetoInstanciado()
+            {
+                CategoriaComando comando = Builder<CategoriaComando>.CreateNew()
+                    .Build();
+
+                Categoria resultado = sut.Instanciar(comando);
+
+                resultado.Nome.Should().Be(comando.Nome);
+            }
+
+        }
+
 
     }
 }

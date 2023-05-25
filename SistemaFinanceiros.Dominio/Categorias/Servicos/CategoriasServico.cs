@@ -23,19 +23,19 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
         }
         public Categoria Editar(int id, CategoriaComando comando)
         {
-            var sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
-            var categoria = Validar(id);
+            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
+            Categoria categoria = Validar(id);
             categoria.SetNome(comando.Nome);
             categoria.SetSistema(sistemaFinanceiro);
-            categoria = categoriasRepositorio.Editar(categoria);
+            categoriasRepositorio.Editar(categoria);
             return categoria;
         }
 
         public Categoria Inserir(CategoriaComando comando)
         {
         Categoria categoria = Instanciar(comando);
-        var response = categoriasRepositorio.Inserir(categoria);
-           return response;
+        categoriasRepositorio.Inserir(categoria);
+           return categoria;
         }
 
          public Categoria Instanciar(CategoriaComando comando)
