@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas;
 using SistemaFinanceiros.Dominio.util;
 
 namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
@@ -20,6 +21,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
         PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request);
         PaginacaoConsulta<DespesaResponse> ListarDespesas(DespesaListarRequest request);
+        IList<DespesasResumo> Consulta();
 
     }
 }

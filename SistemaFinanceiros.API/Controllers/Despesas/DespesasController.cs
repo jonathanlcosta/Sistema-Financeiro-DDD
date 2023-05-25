@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
 using SistemaFinanceiros.DataTransfer.Despesas.Response;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas;
 using SistemaFinanceiros.Dominio.util;
 
 namespace SistemaFinanceiros.API.Controllers.Despesas
@@ -71,6 +72,13 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         [HttpGet("ListarDespesasNaoPagasMesesAtras")]
         public ActionResult<PaginacaoConsulta<DespesaResponse>> ListarDespesasNaoPagasMesesAtras([FromQuery] DespesaListarRequest despesaListarRequest)
         {    var response = despesasAppServico.ListarDespesas(despesaListarRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("Consulta")]
+        public ActionResult<IList<DespesasResumo>> Consulta()
+        {
+            var response = despesasAppServico.Consulta();
             return Ok(response);
         }
     }

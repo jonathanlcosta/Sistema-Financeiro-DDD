@@ -11,14 +11,14 @@ using SistemaFinanceiros.Infra.Genericos;
 
 namespace SistemaFinanceiros.Infra.Despesas.Repositorios
 {
-    public class DespesasConsultasRepositorio : RepositorioDapper<DespesasUsuarioNaoPagasMesesAnterior>, IDespesasConsultasRepositorio
+    public class DespesasConsultasRepositorio : RepositorioDapper<DespesasResumo>, IDespesasConsultasRepositorio
     {
         public DespesasConsultasRepositorio(ISession session) : base (session)
         {
             
         }
 
-      public PaginacaoConsulta<DespesasUsuarioNaoPagasMesesAnterior> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade, string email)
+      public PaginacaoConsulta<DespesasResumo> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade, string email)
       {
           var parametros = new DynamicParameters();
           parametros.Add("@Email", email);

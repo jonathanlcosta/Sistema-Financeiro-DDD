@@ -7,6 +7,7 @@ using SistemaFinanceiros.DataTransfer.Despesas.Response;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Despesas.Entidades;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios;
+using SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas;
 using SistemaFinanceiros.Dominio.Despesas.Repositorios.Filtros;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
@@ -141,6 +142,19 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             Despesa despesa = despesasServico.Validar(id);
             var response = mapper.Map<DespesaResponse>(despesa);
             return response;
+        }
+
+        public IList<DespesasResumo> Consulta()
+        {
+            var query = despesasRepositorio.Query();
+            return query
+            .Select(x => new DespesasResumo
+            {
+                NomeDespesa = x.Nome,
+                NomeSistema = x.Categoria.SistemaFinanceiro.Nome,
+                NomeCategoria = x.Categoria.Nome,
+                NomeUsuario = x.Usuario.Nome
+            }).ToList();
         }
     }
 }
