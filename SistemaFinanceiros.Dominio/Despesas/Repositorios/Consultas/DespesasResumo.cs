@@ -11,5 +11,10 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas
         public string NomeCategoria { get; set; }
         public string NomeDespesa { get; set; }
         public string NomeUsuario { get; set; }
+
+        public override string ToString()
+        {
+            return $"NomeSistema: {NomeSistema}, NomeCategoria: {NomeCategoria}, NomeDespesa: {NomeDespesa}";
+        }
     }
 }

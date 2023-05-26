@@ -29,10 +29,26 @@ namespace SistemaFinanceiros.Jobs.Despesas
 
                 try
                 {
-                    var quantidadeDespesasAtrasadas = despesasAppServico.ListarDespesas(new DespesaListarRequest()).Total;
+                    // var quantidadeDespesasAtrasadas = despesasAppServico.ListarDespesas(new DespesaListarRequest()).Total;
 
-                    this.logger.LogInformation("Temos {quantidadeDespesasAtrasadas} Despesas atrasadas!", quantidadeDespesasAtrasadas);
+                    // this.logger.LogInformation("Temos {quantidadeDespesasAtrasadas} Despesas atrasadas!", quantidadeDespesasAtrasadas);
+                    var despesa = despesasAppServico.Consulta().ToList();
+                    var despesaString = string.Join(", ", despesa.Select(d => d.ToString()));
+                    this.logger.LogInformation("Temos {0} despesas: {1}", despesa.Count, despesaString);
 
+                     using (var arquivoExcelStream = despesasAppServico.ExportarExcel(new DespesaListarRequest()))
+            {
+                string nomeArquivo = $@"C:\Users\nickc\Downloads\Despesas_{DateTime.Now:ddMMyyyyHHmmss}.xlsx";
+
+                using (var fileStream = File.Create(nomeArquivo))
+                {
+                    arquivoExcelStream.Seek(0, SeekOrigin.Begin);
+                    arquivoExcelStream.CopyTo(fileStream);
+                }
+
+                this.logger.LogInformation("Arquivo de Excel gerado com sucesso: {0}", nomeArquivo);
+            }
+        
                 }
                 catch (Exception ex)
                 {
