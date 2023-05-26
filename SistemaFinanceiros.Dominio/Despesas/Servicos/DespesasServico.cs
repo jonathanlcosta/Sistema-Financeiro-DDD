@@ -59,6 +59,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
         public Despesa Editar(int id, DespesaComando comando)
         {
             Categoria categoria = categoriasServico.Validar(comando.IdCategoria);
+            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
             Despesa despesa = Validar(id);
             despesa.SetNome(comando.Nome);
             despesa.SetValor(comando.Valor);
@@ -67,16 +68,17 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
             despesa.SetPago(comando.Pago);
             despesa.SetDespesaAtrasada(comando.DespesaAtrasada);
             despesa.SetCategoria(categoria);
-            despesa = despesasRepositorio.Editar(despesa);
+            despesa.SetUsuario(usuario);
+            despesasRepositorio.Editar(despesa);
             return despesa;
 
         }
 
         public Despesa Inserir(DespesaComando comando)
         {
-           Despesa despesa = Instanciar(comando);
-            var response = despesasRepositorio.Inserir(despesa);
-            return response;
+            Despesa despesa = Instanciar(comando);
+            despesasRepositorio.Inserir(despesa);
+            return despesa;
         }
 
         public Despesa Instanciar(DespesaComando comando)
@@ -91,12 +93,12 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
 
         public Despesa Validar(int id)
         {
-            var despesaResponse = this.despesasRepositorio.Recuperar(id);
-            if(despesaResponse is null)
+            Despesa despesa = despesasRepositorio.Recuperar(id);
+            if(despesa is null)
             {
                  throw new RegraDeNegocioExcecao("Despesa não encontrada");
             }
-            return despesaResponse;
+            return despesa;
         }
     }
 }
