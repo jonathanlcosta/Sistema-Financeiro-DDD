@@ -49,8 +49,11 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
 
                 Despesa resultado = sut.Editar(1, comando);
                 resultado.Nome.Should().Be(comando.Nome);
+                resultado.TipoDespesa.Should().Be(comando.TipoDespesa);
                 resultado.DespesaAtrasada.Should().Be(comando.DespesaAtrasada);
+                resultado.Valor.Should().Be(comando.Valor);
                 resultado.DataVencimento.Should().Be(comando.DataVencimento);
+                resultado.Pago.Should().Be(comando.Pago);
             }
 
         }
@@ -69,8 +72,49 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
             [Fact]
             public void Dado_DespesaForEncontrado_Espero_DespesaValido()
             {
-                despesasRepositorio.Recuperar(Arg.Any<int>()).Returns(despesaValido);
+                despesasRepositorio.Recuperar(1).Returns(despesaValido);
                 sut.Validar(1).Should().BeSameAs(despesaValido);
+            }
+        }
+
+        public class InserirMetodo: DespesasServicoTestes
+        {
+            [Fact]
+            public void Quando_DadosDespesaForemValidos_Espero_ObjetoInserido()
+            {
+                DespesaComando comando = Builder<DespesaComando>.CreateNew().
+                Build();
+
+                usuariosServico.Validar(comando.IdUsuario).Returns(usuarioValido);
+                categoriasServico.Validar(comando.IdCategoria).Returns(categoriaValido);
+
+                Despesa resultado = sut.Inserir(comando);
+                resultado.Nome.Should().Be(comando.Nome);
+                resultado.TipoDespesa.Should().Be(comando.TipoDespesa);
+                resultado.DespesaAtrasada.Should().Be(comando.DespesaAtrasada);
+                resultado.Valor.Should().Be(comando.Valor);
+                resultado.DataVencimento.Should().Be(comando.DataVencimento);
+                resultado.Pago.Should().Be(comando.Pago);
+
+            }
+        }
+
+        public class InstanciarMetodo: DespesasServicoTestes
+        {
+            [Fact]
+            public void Quando_DadosDespesaForemValidos_Espero_ObjetoInstanciado()
+            {
+                DespesaComando comando = Builder<DespesaComando>.CreateNew().
+                Build();
+
+                Despesa resultado = sut.Instanciar(comando);
+                resultado.Nome.Should().Be(comando.Nome);
+                resultado.TipoDespesa.Should().Be(comando.TipoDespesa);
+                resultado.DespesaAtrasada.Should().Be(comando.DespesaAtrasada);
+                resultado.Valor.Should().Be(comando.Valor);
+                resultado.DataVencimento.Should().Be(comando.DataVencimento);
+                resultado.Pago.Should().Be(comando.Pago);
+
             }
         }
 
