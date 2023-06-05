@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DocumentationFile>bin\Debug\net7.0\SistemaFinanceiro.API.xml</DocumentationFile> 
+    <NoWarn>1701;1702;1591</NoWarn>      
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,8 +1,10 @@
+using System.Reflection;
 using System.Text;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using NHibernate;
 using SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Profiles;
 using SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos;
@@ -18,7 +20,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c => 
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SistemaFinanceiro", Version = "v1" });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    c.IncludeXmlComments(xmlPath);
+});
 
 
 builder.Services.AddSingleton<ISessionFactory>(factory => 
@@ -78,7 +90,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "SistemaFinanceiro");
+                c.DisplayRequestDuration();
+            });
 }
 
 var cliente = "http://localhost:4200";

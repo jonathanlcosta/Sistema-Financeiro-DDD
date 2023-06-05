@@ -21,6 +21,11 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
         this.categoriasAppServico = categoriasAppServico;
        }
 
+          /// <summary>
+    /// Recupera uma categoria por Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
         [HttpGet("{id}")]
         public ActionResult<CategoriaResponse> Recuperar(int id)
         {
@@ -32,9 +37,14 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok(response);
         }
 
+          /// <summary>
+    /// Lista as categorias com paginação
+    /// </summary>  
+    /// <param name="request"></param>
+    /// <returns></returns>
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<CategoriaResponse>> Listar([FromQuery] CategoriaListarRequest categoriaListarRequest)
-        {    var response = categoriasAppServico.Listar(categoriaListarRequest);
+        public ActionResult<PaginacaoConsulta<CategoriaResponse>> Listar([FromQuery] CategoriaListarRequest request)
+        {    var response = categoriasAppServico.Listar(request);
             return Ok(response);
         }
 
@@ -45,6 +55,12 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok(response);
         }
 
+
+            /// <summary>
+    /// Adiciona uma nova categoria
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
         [HttpPost]
         public ActionResult<CategoriaResponse> Inserir([FromBody] CategoriaInserirRequest request)
         {
