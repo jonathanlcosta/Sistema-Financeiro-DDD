@@ -54,6 +54,7 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
                 resultado.Valor.Should().Be(comando.Valor);
                 resultado.DataVencimento.Should().Be(comando.DataVencimento);
                 resultado.Pago.Should().Be(comando.Pago);
+                despesasRepositorio.Editar(resultado).Returns(despesaValido);
             }
 
         }
@@ -95,7 +96,7 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
                 resultado.Valor.Should().Be(comando.Valor);
                 resultado.DataVencimento.Should().Be(comando.DataVencimento);
                 resultado.Pago.Should().Be(comando.Pago);
-
+                despesasRepositorio.Inserir(resultado).Returns(despesaValido);
             }
         }
 
