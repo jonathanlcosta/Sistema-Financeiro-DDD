@@ -48,6 +48,10 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok(response);
         }
 
+         /// <summary>
+    /// Lista apenas os nomes das categorias
+    /// </summary>
+    /// <returns></returns>
         [HttpGet("ListarNomesCategorias")]
         public ActionResult<IList<CategoriaNomeResponse>> ListarNomesCategoria()
         {
@@ -68,14 +72,27 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok(retorno);
         }
 
+
+        /// <summary>
+    /// Edita uma categoria por Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
         [HttpPut("{id}")]
-        public ActionResult Editar(int id, [FromBody] CategoriaEditarRequest categoriaEditarRequest)
+        public ActionResult Editar(int id, [FromBody] CategoriaEditarRequest request)
         {
 
-            categoriasAppServico.Editar(id,  categoriaEditarRequest);
+            categoriasAppServico.Editar(id,  request);
             return Ok();
         }
 
+
+               /// <summary>
+    /// Deleta uma categoria por Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Excluir(int id)
@@ -84,6 +101,12 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
             return Ok();
         }
 
+
+        /// <summary>
+    /// Adiciona um arquivo excel dentro do banco
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
         [HttpPost]
         [Route("excel")]
         public ActionResult UploadExcel(IFormFile file)
