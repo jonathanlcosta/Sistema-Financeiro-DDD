@@ -31,7 +31,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Servicos
            usuario.SetSistemaAtual(comando.SistemaAtual);
            usuario.SetSistemaFinanceiro(sistemaFinanceiro);
            usuario.SetNome(comando.Nome);
-           usuario = usuariosRepositorio.Editar(usuario);
+           usuariosRepositorio.Editar(usuario);
            return usuario;
         }
 

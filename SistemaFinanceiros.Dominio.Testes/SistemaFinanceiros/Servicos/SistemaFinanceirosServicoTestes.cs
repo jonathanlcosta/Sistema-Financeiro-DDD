@@ -39,7 +39,7 @@ namespace SistemaFinanceiros.Dominio.Testes.SistemaFinanceiros.Servicos
             }
 
             [Fact]
-            public void Dado_SistemaForEncontrado_Espero_DespesaValido()
+            public void Dado_SistemaForEncontrado_Espero_SistemaValido()
             {
                 sistemaFinanceirosRepositorio.Recuperar(1).Returns(sistemaValido);
                 sut.Validar(1).Should().BeSameAs(sistemaValido);
@@ -49,7 +49,7 @@ namespace SistemaFinanceiros.Dominio.Testes.SistemaFinanceiros.Servicos
         public class InserirMetodo: SistemaFinanceirosServicoTestes
         {
             [Fact]
-            public void Quando_DadosDespesaForemValidos_Espero_ObjetoInserido()
+            public void Quando_DadosSistemaForemValidos_Espero_ObjetoInserido()
             {
                 SistemaFinanceiroComando comando = Builder<SistemaFinanceiroComando>.CreateNew().
                 Build();

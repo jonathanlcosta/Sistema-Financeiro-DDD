@@ -43,7 +43,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
 
         public virtual void SetCpf(string cpf)
         {
-            if (String.IsNullOrEmpty(cpf))
+            if (string.IsNullOrWhiteSpace(cpf))
                 throw new AtributoObrigatorioExcecao("CPF");
             if (cpf.Length != 11)
                 throw new TamanhoDeAtributoInvalidoExcecao("CPF", 11, 11);
@@ -63,7 +63,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Entidades
 
         public virtual void SetNome(string nome)
         {
-            if (String.IsNullOrEmpty(nome))
+            if (string.IsNullOrWhiteSpace(nome))
                 throw new AtributoObrigatorioExcecao("Nome");
             if (nome.Length > 100)
                 throw new TamanhoDeAtributoInvalidoExcecao("Nome");
