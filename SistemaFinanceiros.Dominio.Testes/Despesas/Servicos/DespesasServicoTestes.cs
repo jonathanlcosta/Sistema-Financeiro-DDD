@@ -78,6 +78,27 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
             }
         }
 
+        public class CarregarGraficos: DespesasServicoTestes
+        {
+            [Fact]
+            public void Quando_EmailForPassado_Espero_GraficosCarregados()
+            {
+                string email = "leonardo@gmail.com";
+                var despesasUsuario = Builder<Despesa>.CreateListOfSize(3).Build().ToList();
+                var despesasAnterior = Builder<Despesa>.CreateListOfSize(2).Build().ToList();
+               despesasRepositorio.ListarDespesasUsuario(email).Returns(despesasUsuario);
+              despesasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(email).Returns(despesasAnterior);
+
+                var resultado = sut.CarregaGraficos(email);
+
+                despesasRepositorio.Received(1).ListarDespesasUsuario(email);
+                despesasRepositorio.Received(1).ListarDespesasUsuarioNaoPagasMesesAnterior(email);
+
+                Assert.NotNull(resultado);
+                
+            }
+        }
+
         public class InserirMetodo: DespesasServicoTestes
         {
             [Fact]
