@@ -21,7 +21,7 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos
         {
             SistemaFinanceiro sistemaFinanceiro = Validar(id);
             sistemaFinanceiro.SetNome(comando.Nome);
-            sistemaFinanceiro = sistemaFinanceirosRepositorio.Editar(sistemaFinanceiro);
+            sistemaFinanceirosRepositorio.Editar(sistemaFinanceiro);
             return sistemaFinanceiro;
         }
 
