@@ -28,8 +28,8 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos
         public SistemaFinanceiro Inserir(SistemaFinanceiroComando comando)
         {
         SistemaFinanceiro sistemaFinanceiro = Instanciar(comando);
-        var sistemaFinanceiroResponse = sistemaFinanceirosRepositorio.Inserir(sistemaFinanceiro);
-        return sistemaFinanceiroResponse;
+        sistemaFinanceirosRepositorio.Inserir(sistemaFinanceiro);
+        return sistemaFinanceiro;
         }
 
         public SistemaFinanceiro Instanciar(SistemaFinanceiroComando comando)
