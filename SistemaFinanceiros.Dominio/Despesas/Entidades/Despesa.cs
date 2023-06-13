@@ -48,7 +48,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
        public virtual void SetNome(string nome)
         {
-            if (string.IsNullOrEmpty(nome))
+            if (string.IsNullOrWhiteSpace(nome))
                 throw new AtributoObrigatorioExcecao("Nome");
             if (nome.Length > 100)
                 throw new TamanhoDeAtributoInvalidoExcecao("Nome");
@@ -83,10 +83,9 @@ namespace SistemaFinanceiros.Dominio.Despesas.Entidades
 
         public virtual void SetPago(bool pago)
         {
-            var data = DateTime.UtcNow;
             Pago = pago;
             if(pago == true){
-                DataPagamento = data;
+                DataPagamento = DateTime.UtcNow;
             }
         }
 

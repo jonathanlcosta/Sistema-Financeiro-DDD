@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AulaAPIVitor.Dominio.Enumeradores
+namespace SistemaFinanceiros.Dominio.Enumeradores
 {
     public static class EnumExtension
     {
