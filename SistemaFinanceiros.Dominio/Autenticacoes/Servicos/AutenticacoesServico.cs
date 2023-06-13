@@ -6,13 +6,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using SistemaFinanceiros.Dominio.Autenticacoes.Servicos.Interfaces;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 
 namespace SistemaFinanceiros.Dominio.Autenticacoes.Servicos
 {
     public class AutenticacoesServico : IAutenticacoesServico
     {
-        public string GerarToken(Usuario usuario)
+        public virtual string GerarToken(Usuario usuario)
         {
              SymmetricSecurityKey chave = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn")
@@ -35,14 +36,14 @@ namespace SistemaFinanceiros.Dominio.Autenticacoes.Servicos
 
         public Usuario ValidarCadastro(string email, string senha)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
-                throw new Exception("Email invalido");
+                throw new RegraDeNegocioExcecao("Email invalido");
             }
 
-            if (string.IsNullOrEmpty(senha))
+            if (string.IsNullOrWhiteSpace(senha))
             {
-               throw new Exception("Senha invalido"); 
+               throw new RegraDeNegocioExcecao("Senha invalido"); 
             }
 
             var usuario = new Usuario(email, senha);
@@ -53,11 +54,11 @@ namespace SistemaFinanceiros.Dominio.Autenticacoes.Servicos
         {
             if (usuario is null)
             {
-                throw new Exception("Email incorreto");
+                throw new RegraDeNegocioExcecao("Email incorreto");
             }
             if (!BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
             {
-                throw new Exception("Senha incorreta");
+                throw new RegraDeNegocioExcecao("Senha incorreta");
             }
             return usuario;
         }
