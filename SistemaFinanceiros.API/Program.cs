@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,11 +18,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(op =>
+{
+    op.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    op.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c => 
+builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SistemaFinanceiro", Version = "v1" });
 
@@ -33,14 +38,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-builder.Services.AddSingleton<ISessionFactory>(factory => 
+builder.Services.AddSingleton<ISessionFactory>(factory =>
 {
     string connectionString = builder.Configuration.GetConnectionString("MySql");
     return Fluently.Configure()
     .Database((MySQLConfiguration.Standard.ConnectionString(connectionString)
     .FormatSql()
     .ShowSql()))
-    .Mappings(x => x.FluentMappings.AddFromAssemblyOf<SistemaFinanceirosMap>()) 
+    .Mappings(x => x.FluentMappings.AddFromAssemblyOf<SistemaFinanceirosMap>())
     .BuildSessionFactory();
 });
 builder.Services.AddScoped<NHibernate.ISession>(factory => factory.GetService<ISessionFactory>()!.OpenSession());
@@ -76,7 +81,7 @@ builder.Services.AddAuthentication(x =>
     x.RequireHttpsMetadata = false;
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
-   
+
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(chave),
@@ -90,7 +95,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => 
+    app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "SistemaFinanceiro");
                 c.DisplayRequestDuration();
@@ -98,7 +103,7 @@ if (app.Environment.IsDevelopment())
 }
 
 var cliente = "http://localhost:4200";
-app.UseCors(x => 
+app.UseCors(x =>
 x.AllowAnyOrigin()
 .AllowAnyMethod()
 .AllowAnyHeader()
