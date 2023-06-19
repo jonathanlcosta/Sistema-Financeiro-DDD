@@ -9,6 +9,7 @@ using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Repositorios;
 using SistemaFinanceiros.Dominio.Categorias.Servicos;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Comandos;
+using SistemaFinanceiros.Dominio.Execoes;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Entidades;
 using SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos.Interfaces;
 using Xunit;
@@ -36,14 +37,14 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Servicos
             [Fact]
             public void Dado_CategoriaNaoEncontrado_Espero_Excecao()
             {
-                categoriasRepositorio.Recuperar(Arg.Any<int>()).Returns(x => null);
-                sut.Invoking(x => x.Validar(1)).Should().Throw<Exception>();
+                categoriasRepositorio.Recuperar(1).Returns(x => null);
+                sut.Invoking(x => x.Validar(1)).Should().Throw<RegraDeNegocioExcecao>();
             }
 
             [Fact]
             public void Dado_CategoriaForEncontrado_Espero_CategoriaValido()
             {
-                categoriasRepositorio.Recuperar(Arg.Any<int>()).Returns(categoriaValido);
+                categoriasRepositorio.Recuperar(1).Returns(categoriaValido);
                 sut.Validar(1).Should().BeSameAs(categoriaValido);
             }
         }
@@ -57,6 +58,7 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Servicos
                 .With(x => x.Nome, "Empresa").With(x => x.IdSistemaFinanceiro, 1).Build();
                 
                 Categoria resultado = sut.Inserir(comando);
+                categoriasRepositorio.Inserir(resultado).Returns(categoriaValido);
 
                 resultado.Should().BeOfType<Categoria>();
                 resultado.Nome.Should().Be(comando.Nome);
