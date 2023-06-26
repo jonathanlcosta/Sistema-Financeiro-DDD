@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Response;
 
 namespace SistemaFinanceiros.DataTransfer.Usuarios.Response
 {
@@ -13,6 +14,6 @@ namespace SistemaFinanceiros.DataTransfer.Usuarios.Response
         public string Email { get; set; }
         public bool Administrador { get; set; }
         public bool SistemaAtual { get; set; }
-        public int idSistemaFinanceiro { get; set; }
+        public SistemaFinanceiroResponse SistemaFinanceiro { get; set; }
     }
 }

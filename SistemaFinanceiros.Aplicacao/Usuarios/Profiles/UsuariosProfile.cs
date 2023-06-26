@@ -17,8 +17,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Profiles
         public UsuariosProfile()
         {
         CreateMap<Usuario, CadastroResponse>();
-        CreateMap<Usuario, UsuarioResponse>()
-        .ForMember(x => x.idSistemaFinanceiro, m => m.MapFrom(y => y.SistemaFinanceiro!.Id));
+        CreateMap<Usuario, UsuarioResponse>();
         CreateMap<UsuarioListarRequest, UsuarioListarFiltro>();
         CreateMap<UsuarioEditarRequest, UsuarioEditarComando>();
         }
