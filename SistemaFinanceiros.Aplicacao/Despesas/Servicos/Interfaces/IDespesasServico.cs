@@ -16,7 +16,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         DespesaResponse Editar(int id, DespesaEditarRequest despesaEditarRequest);
         void Excluir(int id); 
         IList<DespesaResponse> ListarDespesasUsuario(string emailUsuario);
-        PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario);
+        PaginacaoConsulta<DespesaConsultaResponse> ListarDespesasUsuarioNaoPagasMesesAnteriorDapper();
         object CarregaGraficos(string email);
         IList<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
         PaginacaoConsulta<DespesaResponse> Listar(DespesaListarRequest request);

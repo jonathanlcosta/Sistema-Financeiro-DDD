@@ -25,10 +25,10 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
             
         }
 
-       [HttpGet("despesas/usuario-nao-pagas-anterior")]
-        public ActionResult<IList<DespesaResponse>> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario)
+       [HttpGet("despesas/usuario-nao-pagas-anteriorDapper")]
+        public ActionResult<IList<DespesaConsultaResponse>> ListarDespesasUsuarioNaoPagasMesesAnterior()
         {
-            var response = despesasAppServico.ListarDespesasUsuarioNaoPagasMesesAnterior(emailUsuario);
+            var response = despesasAppServico.ListarDespesasUsuarioNaoPagasMesesAnteriorDapper();
             return Ok(response);      
         }
 

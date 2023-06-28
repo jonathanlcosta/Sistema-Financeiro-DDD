@@ -11,46 +11,28 @@ using SistemaFinanceiros.Infra.Genericos;
 
 namespace SistemaFinanceiros.Infra.Despesas.Repositorios
 {
-    public class DespesasConsultasRepositorio : RepositorioDapper<DespesasResumo>, IDespesasConsultasRepositorio
+    public class DespesasConsultasRepositorio : RepositorioDapper<DespesasConsulta>, IDespesasConsultasRepositorio
     {
         public DespesasConsultasRepositorio(ISession session) : base (session)
         {
             
         }
 
-      public PaginacaoConsulta<DespesasResumo> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade, string email)
+      public PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade)
       {
           var parametros = new DynamicParameters();
-          parametros.Add("@Email", email);
 
-                    var query = @"SELECT
-                    COUNT(1) as QuantidadeDespesas,
-                    SF.id as IdSistemaFinanceiro,
-                    SF.nome as NomeSistema,
-                    C.id as IdCategoria,
-                    C.nome as NomeCategoria,
-                    D.id as IdDespesa,
-                    D.nome as NomeDespesa,
-                    U.id as IdUsuario,
-                    U.nome as NomeUsuario
-                    FROM DESPESAS D,
-                    USUARIOS U,
-                    CATEGORIAS C,
-                    SISTEMAFINANCEIROS SF
-                    WHERE D.idUsuario = U.id
-                    AND D.idCategoria = C.id
-                    AND C.idSistemaFinanceiro = SF.id
-                    AND U.email = @Email
-                    GROUP BY
-                    IdSistemaFinanceiro,
-                    NomeSistema,
-                    IdCategoria,
-                    NomeCategoria,
-                    IdDespesa,
-                    NomeDespesa,
-                    IdUsuario,
-                    NomeUsuario
-                    ORDER BY COUNT(1) DESC";
+                  var query = @"SELECT D.nome AS Nome,
+              D.valor AS Valor,
+              D.mes AS Mes,
+              D.ano AS Ano,
+              C.nome AS NomeCategoria,
+              S.nome AS NomeSistema,
+              U.email AS NomeUsuario
+              FROM DESPESAS D,
+              CATEGORIAS C,
+              SISTEMAFINANCEIROS S,
+              USUARIOS U";
 
           return Listar(query, parametros, pagina, quantidade);
       }

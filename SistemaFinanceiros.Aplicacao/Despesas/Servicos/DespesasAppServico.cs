@@ -123,11 +123,11 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             return response;
         }
 
-        public PaginacaoConsulta<DespesaResponse> ListarDespesasUsuarioNaoPagasMesesAnterior(string emailUsuario)
+        public PaginacaoConsulta<DespesaConsultaResponse> ListarDespesasUsuarioNaoPagasMesesAnteriorDapper()
         {
 
-        var despesas = despesasConsultasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(1, 100, emailUsuario);
-        var response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
+        var despesas = despesasConsultasRepositorio.ListarDespesasUsuarioNaoPagasMesesAnterior(1, 100);
+        var response = mapper.Map<PaginacaoConsulta<DespesaConsultaResponse>>(despesas);
          return response;
 
         }

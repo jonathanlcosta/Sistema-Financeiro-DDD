@@ -19,14 +19,14 @@ namespace SistemaFinanceiros.Infra.Genericos
         public PaginacaoConsulta<T> Listar(string query, DynamicParameters parametros, int pagina, int quantidade)
         {
             var resultado = new PaginacaoConsulta<T>();
-             var tasks = new List<Task>
-             {
-                new Task(() => resultado.Total = session.Connection.Query<int>($"SELECT COUNT(1) FROM ({query})", parametros).Single()),
-                new Task(() => resultado.Registros = session.Connection.Query<T>(GerarQueryPaginacao(query, pagina, quantidade), parametros).ToList())
-             };
-             Parallel.ForEach(tasks, q => q.RunSynchronously());
-             Task.WaitAll(tasks.ToArray());
-             return resultado;
+    var tasks = new List<Task>
+    {
+        new Task(() => resultado.Total = session.Connection.Query<int>($"SELECT COUNT(1) FROM ({query}) AS Total", parametros).Single()),
+        new Task(() => resultado.Registros = session.Connection.Query<T>(GerarQueryPaginacao(query, pagina, quantidade), parametros).ToList())
+    };
+    Parallel.ForEach(tasks, q => q.RunSynchronously());
+    Task.WaitAll(tasks.ToArray());
+    return resultado;
 
         }
 
