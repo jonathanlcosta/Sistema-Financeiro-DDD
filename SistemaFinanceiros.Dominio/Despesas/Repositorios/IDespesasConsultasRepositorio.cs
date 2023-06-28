@@ -9,6 +9,6 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios
 {
     public interface IDespesasConsultasRepositorio
     {
-        PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade);
+        PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade, string email);
     }
 }

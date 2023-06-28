@@ -18,9 +18,10 @@ namespace SistemaFinanceiros.Infra.Despesas.Repositorios
 
         }
 
-        public PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade)
+        public PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade, string email)
         {
             var parametros = new DynamicParameters();
+            parametros.Add("email", email);
 
             var query = @"SELECT D.nome AS Nome,
               D.valor AS Valor,
@@ -34,7 +35,8 @@ namespace SistemaFinanceiros.Infra.Despesas.Repositorios
               SISTEMAFINANCEIROS S,
               USUARIOS U
               WHERE D.idUsuario = U.id
-              AND D.pago = 0";
+              AND U.email = @email
+              AND D.pago = false";
 
             return Listar(query, parametros, pagina, quantidade);
         }
