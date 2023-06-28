@@ -13,6 +13,6 @@ namespace SistemaFinanceiros.DataTransfer.Despesas.Response
         public int Ano { get; set; }
         public string NomeCategoria { get; set; }
         public string NomeSistema { get; set; }
-        public string NomeUsuario { get; set; }
+        public string EmailUsuario { get; set; }
     }
 }

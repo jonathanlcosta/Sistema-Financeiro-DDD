@@ -13,6 +13,6 @@ namespace SistemaFinanceiros.Dominio.Despesas.Repositorios.Consultas
         public int Ano { get; set; }
         public string NomeCategoria { get; set; }
         public string NomeSistema { get; set; }
-        public string NomeUsuario { get; set; }
+        public string EmailUsuario { get; set; }
     }
 }

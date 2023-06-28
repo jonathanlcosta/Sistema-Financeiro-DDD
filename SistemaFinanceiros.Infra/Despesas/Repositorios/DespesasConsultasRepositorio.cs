@@ -13,29 +13,31 @@ namespace SistemaFinanceiros.Infra.Despesas.Repositorios
 {
     public class DespesasConsultasRepositorio : RepositorioDapper<DespesasConsulta>, IDespesasConsultasRepositorio
     {
-        public DespesasConsultasRepositorio(ISession session) : base (session)
+        public DespesasConsultasRepositorio(ISession session) : base(session)
         {
-            
+
         }
 
-      public PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade)
-      {
-          var parametros = new DynamicParameters();
+        public PaginacaoConsulta<DespesasConsulta> ListarDespesasUsuarioNaoPagasMesesAnterior(int pagina, int quantidade)
+        {
+            var parametros = new DynamicParameters();
 
-                  var query = @"SELECT D.nome AS Nome,
+            var query = @"SELECT D.nome AS Nome,
               D.valor AS Valor,
               D.mes AS Mes,
               D.ano AS Ano,
               C.nome AS NomeCategoria,
               S.nome AS NomeSistema,
-              U.email AS NomeUsuario
+              U.email AS EmailUsuario
               FROM DESPESAS D,
               CATEGORIAS C,
               SISTEMAFINANCEIROS S,
-              USUARIOS U";
+              USUARIOS U
+              WHERE D.idUsuario = U.id
+              AND D.pago = 0";
 
-          return Listar(query, parametros, pagina, quantidade);
-      }
+            return Listar(query, parametros, pagina, quantidade);
+        }
 
 
     }
